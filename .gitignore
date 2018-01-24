@@ -77,3 +77,8 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+*.tlog
+*.lastbuildstate
+Debug/vc110.idb
+*.vcxproj
+OpenGL.vcxproj.filters
