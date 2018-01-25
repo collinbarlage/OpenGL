@@ -19,7 +19,7 @@ Shape::Shape(vector<vec2> points, vec4 c) {
 	
 	//Now let's set up the shaders!!
 	// Load shaders
-	assert((program = InitShader("vshader00_v150.glsl", "fshader00_v150.glsl"))!=-1);
+	assert((program = InitShader("vshader00_uniform.glsl", "fshader00_uniform.glsl"))!=-1);
 	glUseProgram(program);  //make it the active one
 
 	//get the location of the vPosition attribute
