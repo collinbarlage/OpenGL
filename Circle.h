@@ -5,6 +5,8 @@
 #include "Drawable.h"
 #include "Camera.h"
 #include "Light.h"
+#include <cstdlib>
+#include <ctime>
 #include <string>
 #include <vector>
 
@@ -22,6 +24,9 @@ private:
 	int NumVertices;
 	GLuint vPosition;
 	GLuint vColor;
+	GLuint cPosition;
 	vec4 color;
+	vec4 randomColor();
+	GLfloat randomFloat();
 };
 #endif
