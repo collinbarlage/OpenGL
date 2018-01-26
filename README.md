@@ -1,7 +1,15 @@
 # OpenGL 🔥
-CS432 hw0
+CS432 hw1
 Collin Barlage  
-1/18/2018
+1/24/2018
+
+##HW1 NOTES - Change Log
+
+I have abstracted the `Square` class to a `Shape` class which takes in a dynamic vector of verticies. This way a square and a triangle can be drawn with the same class.
+
+I have also created the `Circle` class which is very much identical to the `Shape` class, however it takes in a radius and shades it with random colors.
+
+This multicolored shading was achieved by making a new fshader and vshader, and putting color data on the BufferSubData of the VBO.
 
 ## Features
 
