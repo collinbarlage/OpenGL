@@ -60,15 +60,16 @@ void init()
 	//Scene
 
 	//Red square
-	vector<vec2> square;
-	square.push_back(vec2(0.25, 0.25));
-	square.push_back(vec2(0.75, 0.25));
-	square.push_back(vec2(0.75, 0.75));
-	square.push_back(vec2(0.25, 0.75));
-	mbox = new Shape(square, vec4(1.0, 0.0, 0.0, 1.0));
+	mbox = new Shape(vec4(1.0, 0.0, 0.0, 1.0));
+	mbox->addPoint(vec2(0.25, 0.25));
+	mbox->addPoint(vec2(0.75, 0.25));
+	mbox->addPoint(vec2(0.75, 0.75));
+	mbox->addPoint(vec2(0.25, 0.75));
+	mbox->init();
 	drawables.push_back(mbox);
 
 	//Blue triangle
+	/*
 	vector<vec2> triangle;
 	triangle.push_back(vec2(-1, -1));
 	triangle.push_back(vec2(0, -1));
@@ -79,6 +80,7 @@ void init()
 	//Multicolored circle
 	mcircle = new Circle(.2);
 	drawables.push_back(mcircle);
+	*/
 
 	
 
@@ -91,8 +93,9 @@ void display( void )
 {
     glClear( GL_COLOR_BUFFER_BIT );
 
-	for (unsigned int i = 0; i < drawables.size(); i++)
+	for (unsigned int i = 0; i < drawables.size(); i++) {
 		drawables[i]->draw(cam, lights);
+	}
 	glFlush();
 }
 

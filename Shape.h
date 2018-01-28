@@ -15,13 +15,16 @@ class Shape: public Drawable{
 
 public:	
 	Shape();
-	Shape(vector<vec2> points, vec4 color);
+	Shape(vec4 color);
+	void init();
 	void draw(Camera, vector<Light>);
+	void addPoint(vec2 p);
 	
 private:
 	GLuint vPosition;
 	GLuint vColor;
 	vec4 color;
+	vector<vec2> points;
 	int numVertices;
 };
 #endif

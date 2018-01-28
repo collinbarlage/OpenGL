@@ -1,7 +1,12 @@
 #include "Shape.h"
 
-Shape::Shape(vector<vec2> points, vec4 c) {
+Shape::Shape(vec4 c) {
 
+	color = c;// RGBA colors
+
+}
+
+void Shape::init() {
 	//get a vertex buffer and a vertex array object
 	glGenBuffers(1, &VBO);
 	glGenVertexArrays(1, &VAO);
@@ -9,7 +14,6 @@ Shape::Shape(vector<vec2> points, vec4 c) {
 	glBindVertexArray(VAO); //make this VAO active
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);  //associate the VBO with the active VAO
 
-	color = c;// RGBA colors
 	numVertices = points.size();
 
 	//now make the data and put it on the vertex buffer
@@ -47,4 +51,8 @@ void Shape::draw(Camera cam, vector<Light> lights){
 	//starting at offset 0 in the VBO
 	glDrawArrays(GL_TRIANGLE_FAN, 0, numVertices);
 
+}
+
+void Shape::addPoint(vec2 p) {
+	points.push_back(p);
 }
