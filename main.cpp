@@ -8,8 +8,14 @@
 void init(void);
 void display(void);
 void keyboard(unsigned char, int, int);
+void mouse(GLint button, GLint state, GLint x, GLint y);
 void resize(int width, int height);
 void close(void);
+
+//Transformations
+mat3 transl(float x, float y);
+mat3 rotate(float rad);
+mat3 scale(float s);
 
 //Objects
 Shape* mbox;
@@ -45,6 +51,7 @@ int main(int argc, char **argv)
 	//set up the callback functions
 	glutDisplayFunc(display);
 	glutKeyboardFunc(keyboard);
+	glutMouseFunc(mouse);
 	glutWMCloseFunc(close);
 
 	//start the main event listening loop
@@ -59,14 +66,8 @@ void init()
 	
 	//Scene
 
-	//Red square
-	mbox = new Shape(vec4(1.0, 0.0, 0.0, 1.0));
-	mbox->addPoint(vec2(0.25, 0.25));
-	mbox->addPoint(vec2(0.75, 0.25));
-	mbox->addPoint(vec2(0.75, 0.75));
-	mbox->addPoint(vec2(0.25, 0.75));
-	mbox->init();
-	drawables.push_back(mbox);
+	
+
 
 	//Blue triangle
 	/*
@@ -122,4 +123,66 @@ void close(){
 	for (unsigned int i = 0; i < drawables.size(); i++)
 		delete(drawables[i]);
 
+}
+
+//----------------------------------------------------------------------------
+//Mouse resize callback
+void mouse(GLint button, GLint state, GLint x, GLint y) {
+	GLfloat dy = (GLfloat(x)-250)/250;
+	GLfloat dx = ((GLfloat(y)-250)*-1)/250;
+	
+
+	//Red square
+	if(button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
+		mbox = new Shape(vec4(1.0, 0.0, 0.0, 1.0));
+		if(glutGetModifiers()  && GLUT_ACTIVE_SHIFT) { //check for multicolor
+			mbox = new Shape();
+		}
+		mbox->addVerts(0.1, 0.1);
+		mbox->addVerts(-0.1, 0.1);
+		mbox->addVerts(-0.1, -0.1);
+		mbox->addVerts(0.1, -0.1);
+		mbox->trans(transl(dy,dx));
+		mbox->init();
+		drawables.push_back(mbox);
+	} 
+
+	//Blue triangle
+	if(button == GLUT_RIGHT_BUTTON && state == GLUT_UP) {
+		mbox = new Shape(vec4(0.0, 0.0, 1.0, 1.0));
+		if(glutGetModifiers()  && GLUT_ACTIVE_SHIFT) { //check for multicolor
+			mbox = new Shape();
+		}
+		mbox->addVerts(-.08, -.08);
+		mbox->addVerts(-.08, .12);
+		mbox->addVerts(.12, -.08);
+		mbox->trans(transl(dy,dx));
+		mbox->init();
+		drawables.push_back(mbox);
+	} 
+
+
+}
+
+
+//Helper functions
+
+
+//Transformations
+mat3 transl(float x, float y) {
+	return mat3(vec3(1, 0, x),
+				vec3(0, 1, y),
+				vec3(0, 0, 1));
+}
+
+mat3 rotate(float rad) {
+	return mat3(vec3(cos(rad), -sin(rad), 0),
+				vec3(sin(rad),  cos(rad), 0),
+				vec3(0       ,  0       , 1));
+}
+
+mat3 scale(float s) {
+	return mat3(vec3(s, 0, 0),
+				vec3(0, s, 0),
+				vec3(0, 0, 1));
 }

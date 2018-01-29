@@ -1,9 +1,14 @@
 #include "Shape.h"
 
+Shape::Shape() {
+	multiColor = true;
+	numVertices = 0;
+}
+
 Shape::Shape(vec4 c) {
-
+	multiColor = false;
 	color = c;// RGBA colors
-
+	numVertices = 0;
 }
 
 void Shape::init() {
@@ -14,27 +19,57 @@ void Shape::init() {
 	glBindVertexArray(VAO); //make this VAO active
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);  //associate the VBO with the active VAO
 
-	numVertices = points.size();
+	numVertices = verts.size();
 
-	//now make the data and put it on the vertex buffer
-	// Vertices of a unit cube centered at origin, sides aligned with axes
-	//put the data on the VBO
-	glBufferData(GL_ARRAY_BUFFER, points.size() * sizeof(points), &points[0], GL_STATIC_DRAW);
+
+	vector<vec2> points; //strip homogenius coords for GL
+	vector<vec4> colors;
+	for(int i=0; i< numVertices; i++) {
+		points.push_back(vec2(verts[i].x, verts[i].y));
+		colors.push_back(randomColor());
+	}
+
+	if(multiColor) {
+		cout << "MULTICOLOR" <<endl;
+		//put the data on the VBO
+		glBufferData(GL_ARRAY_BUFFER,points.size() * sizeof(points) + colors.size() * sizeof(colors) , NULL, GL_STATIC_DRAW);
 	
-	//Now let's set up the shaders!!
-	// Load shaders
-	assert((program = InitShader("vshader00_uniform.glsl", "fshader00_uniform.glsl"))!=-1);
-	glUseProgram(program);  //make it the active one
+		glBufferSubData(GL_ARRAY_BUFFER,0,points.size() * sizeof(points) ,&points[0]);
 
-	//get the location of the vPosition attribute
-	assert((vPosition = glGetAttribLocation(program, "vPosition")) != -1);
-	glEnableVertexAttribArray(vPosition);  //enable it
-	//associate the area in the active VBO with this attribute and tell it how data to pull out for each vertex from the VBO
-	glVertexAttribPointer(vPosition, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
+		glBufferSubData(GL_ARRAY_BUFFER,points.size() * sizeof(points) ,sizeof(colors) * colors.size(),&colors[0]);
 
-	//get the location of the uniform color in the shader
-	assert((vColor = glGetUniformLocation(program, "color"))!=-1);
+		//Now let's set up the shaders!!
+		// Load shaders
+		assert((program = InitShader("vshader00_v150.glsl", "fshader00_v150.glsl"))!=-1);
+		glUseProgram(program);  //make it the active one
 
+		//get the location of the vPosition and cPosition attribute
+		assert((vPosition = glGetAttribLocation(program, "vPosition")) != -1);
+		assert((cPosition = glGetAttribLocation(program, "cPosition")) != -1);
+		glEnableVertexAttribArray(vPosition);  //enable it
+		glEnableVertexAttribArray(cPosition);  //enable it
+		//associate the area in the active VBO with this attribute and tell it how data to pull out for each vertex from the VBO
+		glVertexAttribPointer(vPosition, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
+		glVertexAttribPointer(cPosition, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(points.size() * sizeof(points)));
+
+	} else {
+		//put the data on the VBO
+		glBufferData(GL_ARRAY_BUFFER, points.size() * sizeof(points), &points[0], GL_STATIC_DRAW);
+	
+		//Now let's set up the shaders!!
+		// Load shaders
+		assert((program = InitShader("vshader00_uniform.glsl", "fshader00_uniform.glsl"))!=-1);
+		glUseProgram(program);  //make it the active one
+
+		//get the location of the vPosition attribute
+		assert((vPosition = glGetAttribLocation(program, "vPosition")) != -1);
+		glEnableVertexAttribArray(vPosition);  //enable it
+		//associate the area in the active VBO with this attribute and tell it how data to pull out for each vertex from the VBO
+		glVertexAttribPointer(vPosition, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
+
+		//get the location of the uniform color in the shader
+		assert((vColor = glGetUniformLocation(program, "color"))!=-1);
+	}
 }
 
 void Shape::draw(Camera cam, vector<Light> lights){
@@ -53,6 +88,24 @@ void Shape::draw(Camera cam, vector<Light> lights){
 
 }
 
-void Shape::addPoint(vec2 p) {
-	points.push_back(p);
+void Shape::addVerts(GLfloat x, GLfloat y) {
+	verts.push_back(vec3(x,y,1)); //make homogenius point
+	numVertices++;
 }
+
+
+void Shape::trans(mat3 m) {
+	for(int i=0; i<numVertices; i++) {
+		verts[i] = m*verts[i];
+	}
+}
+
+vec4 Shape::randomColor() {
+	return vec4(randomFloat(), randomFloat(), randomFloat(), 1.0);
+}
+
+GLfloat Shape::randomFloat() {
+	return ((GLfloat) rand() / (RAND_MAX));
+}
+
+

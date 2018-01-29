@@ -78,3 +78,8 @@ GLfloat Circle::randomFloat() {
 	return ((GLfloat) rand() / (RAND_MAX));
 }
 
+void Circle::trans(mat3 m) {
+	
+}
+
+

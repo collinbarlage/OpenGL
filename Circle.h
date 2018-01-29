@@ -19,6 +19,7 @@ public:
 	Circle();
 	Circle(float radius);
 	void draw(Camera, vector<Light>);
+	void trans(mat3 m);
 	
 private:
 	int NumVertices;

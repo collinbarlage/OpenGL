@@ -18,13 +18,19 @@ public:
 	Shape(vec4 color);
 	void init();
 	void draw(Camera, vector<Light>);
-	void addPoint(vec2 p);
+	void trans(mat3 m);
+	void addVerts(GLfloat x, GLfloat y);
 	
 private:
 	GLuint vPosition;
 	GLuint vColor;
+	GLuint cPosition;
 	vec4 color;
-	vector<vec2> points;
+	vector<vec3> verts;
 	int numVertices;
+	bool multiColor;
+	vec4 randomColor();
+	GLfloat randomFloat();
+
 };
 #endif
