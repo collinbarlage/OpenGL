@@ -12,6 +12,8 @@ Shape::Shape(vec4 c) {
 }
 
 void Shape::init() {
+	srand(time(NULL));
+
 	//get a vertex buffer and a vertex array object
 	glGenBuffers(1, &VBO);
 	glGenVertexArrays(1, &VAO);
@@ -23,10 +25,11 @@ void Shape::init() {
 
 
 	vector<vec2> points; //strip homogenius coords for GL
-	vector<vec4> colors;
 	for(int i=0; i< numVertices; i++) {
 		points.push_back(vec2(verts[i].x, verts[i].y));
-		colors.push_back(randomColor());
+		if(colors.size() < points.size()) {
+			colors.push_back(randomColor());
+		}
 	}
 
 	if(multiColor) {

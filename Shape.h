@@ -6,6 +6,7 @@
 #include "Camera.h"
 #include "Light.h"
 #include <string>
+#include <ctime>
 #include <vector>
 
 using namespace std;
@@ -27,6 +28,7 @@ private:
 	GLuint cPosition;
 	vec4 color;
 	vector<vec3> verts;
+	vector<vec4> colors;
 	int numVertices;
 	bool multiColor;
 	vec4 randomColor();

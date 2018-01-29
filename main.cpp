@@ -138,8 +138,8 @@ void close(){
 //----------------------------------------------------------------------------
 //Mouse resize callback
 void mouse(GLint button, GLint state, GLint x, GLint y) {
-	GLfloat dy = (GLfloat(x)-250)/250;
-	GLfloat dx = ((GLfloat(y)-250)*-1)/250;
+	GLfloat dx = (GLfloat(x)-250)/250;
+	GLfloat dy = ((GLfloat(y)-250)*-1)/250;
 	
 
 	//Red square
@@ -147,11 +147,11 @@ void mouse(GLint button, GLint state, GLint x, GLint y) {
 		mbox = new Shape(vec4(1.0, 0.0, 0.0, 1.0));
 		if(glutGetModifiers()  && GLUT_ACTIVE_SHIFT)  //check for multicolor
 			mbox = new Shape();
-		mbox->addVerts(0.1, 0.1);
-		mbox->addVerts(-0.1, 0.1);
-		mbox->addVerts(-0.1, -0.1);
-		mbox->addVerts(0.1, -0.1);
-		mbox->trans(transl(vec2(dy,dx)));
+		mbox->addVerts(0.15, 0.15);
+		mbox->addVerts(-0.15, 0.15);
+		mbox->addVerts(-0.15, -0.15);
+		mbox->addVerts(0.15, -0.15);
+		mbox->trans(transl(vec2(dx,dy)));
 		mbox->position = vec2(dx, dy);
 		mbox->init();
 		drawables.push_back(mbox);
@@ -162,11 +162,11 @@ void mouse(GLint button, GLint state, GLint x, GLint y) {
 		mbox = new Shape(vec4(0.0, 0.0, 1.0, 1.0));
 		if(glutGetModifiers()  && GLUT_ACTIVE_SHIFT)  //check for multicolor
 			mbox = new Shape();
-		mbox->addVerts(-.08, -.08);
-		mbox->addVerts(-.08, .12);
-		mbox->addVerts(.12, -.08);
+		mbox->addVerts(-.13, -.13);
+		mbox->addVerts(-.13, .17);
+		mbox->addVerts(.17, -.13);
 		mbox->position = vec2(dx, dy);
-		mbox->trans(transl(vec2(dy,dx)));
+		mbox->trans(transl(vec2(dx,dy)));
 		mbox->init();
 		drawables.push_back(mbox);
 	} 
@@ -176,12 +176,12 @@ void mouse(GLint button, GLint state, GLint x, GLint y) {
 //----------------------------------------------------------------------------
 //Timer  callback
 void timerCallback(int value) {
-	cout << "TITS" << endl;
 	vec2 pos;
 	//Rotate all objects
 	for(int i=0; i<drawables.size(); i++) {
 		pos = drawables[i]->position;
 		drawables[i]->trans(transl(pos)*rotate(.02)*transl(vec2(-pos.x, -pos.y)));
+		//drawables[i]->setModelMatrix(transl(pos)*rotate(.02)*transl(vec2(-pos.x, -pos.y)));
 		drawables[i]->init();
 	}
 
