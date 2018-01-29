@@ -11,9 +11,10 @@ void keyboard(unsigned char, int, int);
 void mouse(GLint button, GLint state, GLint x, GLint y);
 void resize(int width, int height);
 void close(void);
+void timerCallback(int value);
 
 //Transformations
-mat3 transl(float x, float y);
+mat3 transl(vec2 t);
 mat3 rotate(float rad);
 mat3 scale(float s);
 
@@ -23,6 +24,9 @@ Circle* mcircle;
 Camera cam;
 vector<Light> lights;
 vector<Drawable*>drawables;
+
+//Helpers
+bool animate = false; 
 //----------------------------------------------------------------------------
 
 
@@ -110,6 +114,12 @@ void keyboard( unsigned char key, int x, int y )
 		close();
 		exit(EXIT_SUCCESS);
 	    break;
+	case ' ': 
+		//Rotation animation
+		animate = !animate; //toggle
+		glutTimerFunc(1, timerCallback, 0);
+
+		break;
     }
 }
 
@@ -135,14 +145,14 @@ void mouse(GLint button, GLint state, GLint x, GLint y) {
 	//Red square
 	if(button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
 		mbox = new Shape(vec4(1.0, 0.0, 0.0, 1.0));
-		if(glutGetModifiers()  && GLUT_ACTIVE_SHIFT) { //check for multicolor
+		if(glutGetModifiers()  && GLUT_ACTIVE_SHIFT)  //check for multicolor
 			mbox = new Shape();
-		}
 		mbox->addVerts(0.1, 0.1);
 		mbox->addVerts(-0.1, 0.1);
 		mbox->addVerts(-0.1, -0.1);
 		mbox->addVerts(0.1, -0.1);
-		mbox->trans(transl(dy,dx));
+		mbox->trans(transl(vec2(dy,dx)));
+		mbox->position = vec2(dx, dy);
 		mbox->init();
 		drawables.push_back(mbox);
 	} 
@@ -150,28 +160,45 @@ void mouse(GLint button, GLint state, GLint x, GLint y) {
 	//Blue triangle
 	if(button == GLUT_RIGHT_BUTTON && state == GLUT_UP) {
 		mbox = new Shape(vec4(0.0, 0.0, 1.0, 1.0));
-		if(glutGetModifiers()  && GLUT_ACTIVE_SHIFT) { //check for multicolor
+		if(glutGetModifiers()  && GLUT_ACTIVE_SHIFT)  //check for multicolor
 			mbox = new Shape();
-		}
 		mbox->addVerts(-.08, -.08);
 		mbox->addVerts(-.08, .12);
 		mbox->addVerts(.12, -.08);
-		mbox->trans(transl(dy,dx));
+		mbox->position = vec2(dx, dy);
+		mbox->trans(transl(vec2(dy,dx)));
 		mbox->init();
 		drawables.push_back(mbox);
 	} 
 
 
 }
+//----------------------------------------------------------------------------
+//Timer  callback
+void timerCallback(int value) {
+	cout << "TITS" << endl;
+	vec2 pos;
+	//Rotate all objects
+	for(int i=0; i<drawables.size(); i++) {
+		pos = drawables[i]->position;
+		drawables[i]->trans(transl(pos)*rotate(.02)*transl(vec2(-pos.x, -pos.y)));
+		drawables[i]->init();
+	}
 
+	//continue rotating unless spacebar was pressed to toggle animation
+	if (animate) {
+		glutTimerFunc(3, timerCallback, 0);
+		glutPostRedisplay();
+	}
+}
 
 //Helper functions
 
 
 //Transformations
-mat3 transl(float x, float y) {
-	return mat3(vec3(1, 0, x),
-				vec3(0, 1, y),
+mat3 transl(vec2 t) {
+	return mat3(vec3(1, 0, t.x),
+				vec3(0, 1, t.y),
 				vec3(0, 0, 1));
 }
 
