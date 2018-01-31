@@ -27,10 +27,12 @@ private:
 	GLuint vColor;
 	GLuint cPosition;
 	vec4 color;
+	vec4 ogColor;
 	vector<vec3> verts;
 	vector<vec4> colors;
 	int numVertices;
 	bool multiColor;
+	bool brightness;
 	vec4 randomColor();
 	GLfloat randomFloat();
 

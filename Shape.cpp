@@ -2,12 +2,15 @@
 
 Shape::Shape() {
 	multiColor = true;
+	brightness = true;
 	numVertices = 0;
 }
 
 Shape::Shape(vec4 c) {
 	multiColor = false;
+	brightness = true;
 	color = c;// RGBA colors
+	ogColor = color;
 	numVertices = 0;
 }
 
@@ -97,8 +100,26 @@ void Shape::addVerts(GLfloat x, GLfloat y) {
 
 
 void Shape::trans(mat3 m) {
+	vec4 black = vec4(0.0, 0.0, 0.0, 1.0);
+	//move verts
 	for(int i=0; i<numVertices; i++) {
 		verts[i] = m*verts[i];
+	}
+
+	//change brightnes
+	//cout << color << endl;
+	if(brightness) {
+		if(color.x < black.x && color.y < black.y && color.z < black.z) {
+			brightness = false;
+		} else {
+			color += vec4(-0.007, -0.007, -0.007, 0);
+		}
+	} else {
+		if(color.x > ogColor.x && color.y > ogColor.y && color.z > ogColor.z) {
+			brightness = true;
+		} else {
+			color += vec4(0.007, 0.007, 0.007, 0);
+		}
 	}
 }
 
