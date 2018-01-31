@@ -180,14 +180,14 @@ void timerCallback(int value) {
 	//Rotate all objects
 	for(int i=0; i<drawables.size(); i++) {
 		pos = drawables[i]->position;
-		drawables[i]->trans(transl(pos)*rotate(.02)*transl(vec2(-pos.x, -pos.y)));
+		drawables[i]->trans(transl(pos)*rotate(.03)*transl(vec2(-pos.x, -pos.y)));
 		//drawables[i]->setModelMatrix(transl(pos)*rotate(.02)*transl(vec2(-pos.x, -pos.y)));
 		drawables[i]->init();
 	}
 
 	//continue rotating unless spacebar was pressed to toggle animation
 	if (animate) {
-		glutTimerFunc(3, timerCallback, 0);
+		glutTimerFunc(5, timerCallback, 0);
 		glutPostRedisplay();
 	}
 }

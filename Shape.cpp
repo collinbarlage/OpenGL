@@ -33,7 +33,6 @@ void Shape::init() {
 	}
 
 	if(multiColor) {
-		cout << "MULTICOLOR" <<endl;
 		//put the data on the VBO
 		glBufferData(GL_ARRAY_BUFFER,points.size() * sizeof(points) + colors.size() * sizeof(colors) , NULL, GL_STATIC_DRAW);
 	
