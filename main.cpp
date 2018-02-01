@@ -67,27 +67,8 @@ int main(int argc, char **argv)
 void init()
 {
 	glClearColor(1.0, 1.0, 1.0, 1.0);
-	
-	//Scene
 
-	
-
-
-	//Blue triangle
-	/*
-	vector<vec2> triangle;
-	triangle.push_back(vec2(-1, -1));
-	triangle.push_back(vec2(0, -1));
-	triangle.push_back(vec2(0, 0));
-	mbox = new Shape(triangle, vec4(0.0, 0.0, 1.0, 1.0));
-	drawables.push_back(mbox);
-
-	//Multicolored circle
-	mcircle = new Circle(.2);
-	drawables.push_back(mcircle);
-	*/
-
-	
+	//Initial scene:
 
 }
 
@@ -180,9 +161,8 @@ void timerCallback(int value) {
 	//Rotate all objects
 	for(int i=0; i<drawables.size(); i++) {
 		pos = drawables[i]->position;
-		drawables[i]->trans(transl(pos)*rotate(.03)*transl(vec2(-pos.x, -pos.y)));
-		//drawables[i]->setModelMatrix(transl(pos)*rotate(.02)*transl(vec2(-pos.x, -pos.y)));
-		//drawables[i]->init();
+		//rotate
+		drawables[i]->trans(transl(pos)*rotate(.01)*transl(vec2(-pos.x, -pos.y)));
 	}
 
 	//continue rotating unless spacebar was pressed to toggle animation
@@ -191,8 +171,6 @@ void timerCallback(int value) {
 		glutPostRedisplay();
 	}
 }
-
-//Helper functions
 
 
 //Transformations

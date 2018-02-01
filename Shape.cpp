@@ -25,16 +25,10 @@ void Shape::init() {
 	glBindVertexArray(VAO); //make this VAO active
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);  //associate the VBO with the active VAO
 
-	numVertices = verts.size();
-
-
-
 	if(multiColor) {
 		//put the data on the VBO
 		glBufferData(GL_ARRAY_BUFFER,points.size() * sizeof(points) + colors.size() * sizeof(colors) , NULL, GL_STATIC_DRAW);
-	
 		glBufferSubData(GL_ARRAY_BUFFER,0,points.size() * sizeof(points) ,&points[0]);
-
 		glBufferSubData(GL_ARRAY_BUFFER,points.size() * sizeof(points) ,sizeof(colors) * colors.size(),&colors[0]);
 
 		//Now let's set up the shaders!!
@@ -47,6 +41,7 @@ void Shape::init() {
 		assert((cPosition = glGetAttribLocation(program, "cPosition")) != -1);
 		glEnableVertexAttribArray(vPosition);  //enable it
 		glEnableVertexAttribArray(cPosition);  //enable it
+
 		//associate the area in the active VBO with this attribute and tell it how data to pull out for each vertex from the VBO
 		glVertexAttribPointer(vPosition, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
 		glVertexAttribPointer(cPosition, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(points.size() * sizeof(points)));
@@ -63,6 +58,7 @@ void Shape::init() {
 		//get the location of the vPosition attribute
 		assert((vPosition = glGetAttribLocation(program, "vPosition")) != -1);
 		glEnableVertexAttribArray(vPosition);  //enable it
+
 		//associate the area in the active VBO with this attribute and tell it how data to pull out for each vertex from the VBO
 		glVertexAttribPointer(vPosition, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
 
@@ -109,13 +105,12 @@ void Shape::trans(mat3 m) {
 		points[i] = vec2(verts[i].x, verts[i].y);
 	}
 
+	//refresh VBO abd VAO
 	glBindVertexArray(VAO); //make this VAO active
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);  //associate the VBO with the active VAO
 	glBufferSubData(GL_ARRAY_BUFFER,0,points.size() * sizeof(points) ,&points[0]);
-	glBufferSubData(GL_ARRAY_BUFFER,points.size() * sizeof(points) ,sizeof(colors) * colors.size(),&colors[0]);
-	glEnableVertexAttribArray(vPosition);  //enable it
-	//associate the area in the active VBO with this attribute and tell it how data to pull out for each vertex from the VBO
-	glVertexAttribPointer(vPosition, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
+	//glBufferSubData(GL_ARRAY_BUFFER,points.size() * sizeof(points) ,sizeof(colors) * colors.size(),&colors[0]);
+
 
 	//change brightnes
 	if(brightness) {
