@@ -1,7 +1,7 @@
 # OpenGL 🔥
-CS432 hw1
+CS432 hw2
 Collin Barlage  
-1/24/2018
+1/31/2018
 
 ##HW2 NOTES - Change Log
 

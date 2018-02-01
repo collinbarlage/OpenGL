@@ -93,8 +93,6 @@ void Shape::addVerts(GLfloat x, GLfloat y) {
 
 
 void Shape::trans(mat3 m) {
-	vec4 black = vec4(0.0, 0.0, 0.0, 1.0);
-	
 	//move verts
 	for(int i=0; i<numVertices; i++) {
 		verts[i] = m*verts[i];
@@ -111,6 +109,7 @@ void Shape::trans(mat3 m) {
 	glBufferSubData(GL_ARRAY_BUFFER,0,points.size() * sizeof(points) ,&points[0]);
 
 	//change brightnes
+	vec4 black = vec4(0.0, 0.0, 0.0, 1.0);
 	if(brightness) {
 		if(color.x < black.x && color.y < black.y && color.z < black.z) {
 			brightness = false;
