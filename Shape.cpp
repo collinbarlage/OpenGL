@@ -7,16 +7,17 @@ Shape::Shape() {
 }
 
 Shape::Shape(vec4 c) {
+
 	multiColor = false;
 	brightness = true;
 	color = c;// RGBA colors
 	ogColor = color;
 	numVertices = 0;
+
 }
 
 void Shape::init() {
 	srand(time(NULL));
-
 	//get a vertex buffer and a vertex array object
 	glGenBuffers(1, &VBO);
 	glGenVertexArrays(1, &VAO);
@@ -27,13 +28,6 @@ void Shape::init() {
 	numVertices = verts.size();
 
 
-	vector<vec2> points; //strip homogenius coords for GL
-	for(int i=0; i< numVertices; i++) {
-		points.push_back(vec2(verts[i].x, verts[i].y));
-		if(colors.size() < points.size()) {
-			colors.push_back(randomColor());
-		}
-	}
 
 	if(multiColor) {
 		//put the data on the VBO
@@ -95,19 +89,35 @@ void Shape::draw(Camera cam, vector<Light> lights){
 
 void Shape::addVerts(GLfloat x, GLfloat y) {
 	verts.push_back(vec3(x,y,1)); //make homogenius point
+	points.push_back(vec2(x, y)); //make unhomogenius point
+	colors.push_back(randomColor()); //generate color
+
 	numVertices++;
 }
 
 
 void Shape::trans(mat3 m) {
 	vec4 black = vec4(0.0, 0.0, 0.0, 1.0);
+	
 	//move verts
 	for(int i=0; i<numVertices; i++) {
 		verts[i] = m*verts[i];
 	}
 
+	//strip homogenious coords and refresh points
+	for(int i=0; i<numVertices; i++) {
+		points[i] = vec2(verts[i].x, verts[i].y);
+	}
+
+	glBindVertexArray(VAO); //make this VAO active
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);  //associate the VBO with the active VAO
+	glBufferSubData(GL_ARRAY_BUFFER,0,points.size() * sizeof(points) ,&points[0]);
+	glBufferSubData(GL_ARRAY_BUFFER,points.size() * sizeof(points) ,sizeof(colors) * colors.size(),&colors[0]);
+	glEnableVertexAttribArray(vPosition);  //enable it
+	//associate the area in the active VBO with this attribute and tell it how data to pull out for each vertex from the VBO
+	glVertexAttribPointer(vPosition, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
+
 	//change brightnes
-	//cout << color << endl;
 	if(brightness) {
 		if(color.x < black.x && color.y < black.y && color.z < black.z) {
 			brightness = false;

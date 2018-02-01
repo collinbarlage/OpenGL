@@ -28,6 +28,7 @@ private:
 	GLuint cPosition;
 	vec4 color;
 	vec4 ogColor;
+	vector<vec2> points; 
 	vector<vec3> verts;
 	vector<vec4> colors;
 	int numVertices;

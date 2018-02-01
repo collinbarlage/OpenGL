@@ -182,7 +182,7 @@ void timerCallback(int value) {
 		pos = drawables[i]->position;
 		drawables[i]->trans(transl(pos)*rotate(.03)*transl(vec2(-pos.x, -pos.y)));
 		//drawables[i]->setModelMatrix(transl(pos)*rotate(.02)*transl(vec2(-pos.x, -pos.y)));
-		drawables[i]->init();
+		//drawables[i]->init();
 	}
 
 	//continue rotating unless spacebar was pressed to toggle animation
