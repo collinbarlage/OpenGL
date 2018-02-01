@@ -109,8 +109,6 @@ void Shape::trans(mat3 m) {
 	glBindVertexArray(VAO); //make this VAO active
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);  //associate the VBO with the active VAO
 	glBufferSubData(GL_ARRAY_BUFFER,0,points.size() * sizeof(points) ,&points[0]);
-	//glBufferSubData(GL_ARRAY_BUFFER,points.size() * sizeof(points) ,sizeof(colors) * colors.size(),&colors[0]);
-
 
 	//change brightnes
 	if(brightness) {

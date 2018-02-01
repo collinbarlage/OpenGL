@@ -3,13 +3,17 @@ CS432 hw1
 Collin Barlage  
 1/24/2018
 
-##HW1 NOTES - Change Log
+##HW2 NOTES - Change Log
 
-I have abstracted the `Square` class to a `Shape` class which takes in a dynamic vector of verticies. This way a square and a triangle can be drawn with the same class.
+* Moved all vertex and point data to the Shape class
 
-I have also created the `Circle` class which is very much identical to the `Shape` class, however it takes in a radius and shades it with random colors.
+* Allow for dynamically adding objects
 
-This multicolored shading was achieved by making a new fshader and vshader, and putting color data on the BufferSubData of the VBO.
+* Alter shape class to have uniform *and* multicolor shading
+
+* Introduce homogenius points for translations
+
+* Use timer callback to to animate points and brightness
 
 ## Features
 
