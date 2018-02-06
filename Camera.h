@@ -3,7 +3,7 @@
 #include "Angel.h"
 
 class Camera {
-	//TODO
+//TODO
 };
 
 #endif

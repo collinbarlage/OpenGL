@@ -14,7 +14,7 @@ namespace Angel {
 
 //----------------------------------------------------------------------------
 //
-//  mat2 - 2D Shape matrix
+//  mat2 - 2D square matrix
 //
 
 class mat2 {
@@ -188,7 +188,7 @@ mat2 transpose( const mat2& A ) {
 
 //----------------------------------------------------------------------------
 //
-//  mat3 - 3D Shape matrix 
+//  mat3 - 3D square matrix 
 //
 
 class mat3 {
@@ -377,7 +377,7 @@ mat3 transpose( const mat3& A ) {
 
 //----------------------------------------------------------------------------
 //
-//  mat4.h - 4D Shape matrix
+//  mat4.h - 4D square matrix
 //
 
 class mat4 {

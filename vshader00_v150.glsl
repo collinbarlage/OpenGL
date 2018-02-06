@@ -1,11 +1,15 @@
 #version 150
 
-in vec2 vPosition;
-in vec4 cPosition;
+in  vec4 vPosition;
+in  vec4 vColor;
 out vec4 color;
+uniform mat4 model_matrix;
 
-void main()
-{
-  gl_Position = vec4(vPosition.x, vPosition.y, 0, 1);
-  color = cPosition;
+void main() 
+{ 
+
+  gl_Position = model_matrix*vPosition;
+  color = vColor;
+ 
+
 }

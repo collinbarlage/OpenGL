@@ -6,13 +6,16 @@ Drawable::~Drawable() {
 
 unsigned char* Drawable::ppmRead(char* filename, int* width, int* height) {
 
-	FILE* fp=NULL;
+	FILE* fp = NULL;
 	int i, w, h, d;
 	unsigned char* image;
 	char head[70];		// max line <= 70 in PPM (per spec).
-
+#ifdef WIN32
 	fopen_s(&fp, filename, "rb");
-	if (fp==NULL) {
+#else
+	fp = fopen(filename, "rb");
+#endif
+	if (fp == NULL) {
 		perror(filename);
 		return NULL;
 	}
@@ -31,12 +34,27 @@ unsigned char* Drawable::ppmRead(char* filename, int* width, int* height) {
 		fgets(head, 70, fp);
 		if (head[0] == '#')		// skip comments.
 			continue;
-		if (i == 0)
+		if (i == 0) {
+#ifdef WIN32
 			i += sscanf_s(head, "%d %d %d", &w, &h, &d);
-		else if (i == 1)
+#else
+			i += sscanf(head, "%d %d %d", &w, &h, &d);
+#endif
+		}
+		else if (i == 1) {
+#ifdef WIN32
 			i += sscanf_s(head, "%d %d", &h, &d);
-		else if (i == 2)
+#else
+			i += sscanf(head, "%d %d", &h, &d);
+#endif
+		}
+		else if (i == 2) {
+#ifdef WIN32
 			i += sscanf_s(head, "%d", &d);
+#else
+			i += sscanf(head, "%d", &d);
+#endif
+		}
 	}
 
 	// Grab all the image data in one fell swoop.
