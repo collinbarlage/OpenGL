@@ -1,24 +1,10 @@
 #include "Cube.h"
 
 Cube::Cube() {
-	vertices.push_back(vec4(-0.5,-0.5,0.5,1));
-	vertices.push_back(vec4(-0.5,0.5,0.5,1));
-	vertices.push_back(vec4(0.5,0.5,0.5,1));
-	vertices.push_back(vec4(0.5,-0.5,0.5,1));
-	vertices.push_back(vec4(-0.5,-0.5,-0.5,1));
-	vertices.push_back(vec4(-0.5,0.5,-0.5,1));
-	vertices.push_back(vec4(0.5,0.5,-0.5,1));
-	vertices.push_back(vec4(0.5,-0.5,-0.5,1));
 
-	potentialColors.push_back(vec4(0,0,0,1));
-	potentialColors.push_back(vec4(1,0,0,1));
-	potentialColors.push_back(vec4(0,1,0,1));
-	potentialColors.push_back(vec4(0,0,1,1));
-	potentialColors.push_back(vec4(1,1,0,1));
-	potentialColors.push_back(vec4(1,0,1,1));
-	potentialColors.push_back(vec4(0,1,1,1));
-	potentialColors.push_back(vec4(0.5f,0.2f,0.4f,1));
+}
 
+void Cube::init() {
 	//make room for colors and points
 	for(int i=0; i<vertices.size()*2*6; i++) {
 		points.push_back(vec4(0,0,0,0));
@@ -55,6 +41,8 @@ Cube::Cube() {
 
 	//get the location of the model matrix
 	assert((mmLoc = glGetUniformLocation(program, "model_matrix")) != -1);
+	assert((cmLoc = glGetUniformLocation(program, "camera_matrix")) != -1);
+	
 
 }
 
@@ -70,30 +58,20 @@ void Cube::makeQuad(int ind1, int ind2, int ind3, int ind4) {
 	index++;
 
 	points[index] = vertices[ind2];
-
 	colors[index] = colors[index - 1];
-
 	index++;
 
 	points[index] = vertices[ind3]; 
-
-
-
 	colors[index] = colors[index - 1];
-
 	index++;
 
 	//Triangle #2
 
 	points[index] = vertices[ind3];
-
 	colors[index] = colors[index - 1];
 	index++;
 
-	cout << "wat " << index << endl;
-
 	points[index] = vertices[ind4];
-
 	colors[index] = colors[index - 1];
 	index++;
 
@@ -114,11 +92,16 @@ void Cube::buildCube() {
 }
 
 void Cube::draw(Camera cam, vector<Light> lights){
-
 	//Draw the cube body
 	glBindVertexArray(VAO);
 	glUseProgram(program);  //also switch to using this shader program
 	glUniformMatrix4fv(mmLoc, 1, GL_TRUE,modelmatrix);
+	glUniformMatrix4fv(cmLoc, 1, GL_TRUE,cam.cameraMatrix);
 	glDrawArrays(GL_TRIANGLES, 0, 6 * 2 * 3);
 
+}
+
+void Cube::addVert(vec4 v, vec4 c) {
+	vertices.push_back(v);
+	potentialColors.push_back(c);
 }

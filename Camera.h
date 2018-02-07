@@ -3,7 +3,10 @@
 #include "Angel.h"
 
 class Camera {
-//TODO
+public:
+	mat4 cameraMatrix;
+	void setCameraMatrix(mat4 cm) { cameraMatrix = cm; }
+	void move(GLfloat x, GLfloat y, GLfloat z);
 };
 
 #endif

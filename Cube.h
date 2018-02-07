@@ -16,6 +16,11 @@ class Cube: public Drawable{
 public:
 	Cube();
 	~Cube();
+
+	Cube(vector<vec4> verts);
+
+	void init();
+	void addVert(vec4 v, vec4 c);
 	void draw(Camera, vector<Light>);
 
 private:
@@ -24,6 +29,8 @@ private:
 	GLuint vPosition;
 	GLuint vColor;
 	GLuint mmLoc;
+	GLuint cmLoc;
+	GLuint pmLoc;
 
 	unsigned int index;
 
