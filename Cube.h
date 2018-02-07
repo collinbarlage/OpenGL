@@ -5,6 +5,7 @@
 #include "Drawable.h"
 #include "Camera.h"
 #include "Light.h"
+#include <ctime>
 #include <string>
 #include <vector>
 
@@ -20,7 +21,7 @@ public:
 	Cube(vector<vec4> verts);
 
 	void init();
-	void addVert(vec4 v, vec4 c);
+	void addVert(vec4 v);
 	void draw(Camera, vector<Light>);
 
 private:
@@ -31,6 +32,8 @@ private:
 	GLuint mmLoc;
 	GLuint cmLoc;
 	GLuint pmLoc;
+	vec4 randomColor();
+	GLfloat randomFloat();
 
 	unsigned int index;
 

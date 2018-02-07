@@ -5,10 +5,12 @@ Cube::Cube() {
 }
 
 void Cube::init() {
+	srand(time(NULL));
+
 	//make room for colors and points
 	for(int i=0; i<vertices.size()*2*6; i++) {
 		points.push_back(vec4(0,0,0,0));
-		colors.push_back(vec4(0,0,0,0));
+		colors.push_back(randomColor());
 	}
 
 	buildCube();
@@ -37,7 +39,7 @@ void Cube::init() {
 	//get the location of the uniform color in the shader
 	assert((vColor = glGetAttribLocation(program, "vColor"))!=-1);
 	glEnableVertexAttribArray(vColor);
-	glVertexAttribPointer(vColor, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeof(points)));
+	glVertexAttribPointer(vColor, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeof(points)*points.size()));
 
 	//get the location of the model matrix
 	assert((mmLoc = glGetUniformLocation(program, "model_matrix")) != -1);
@@ -101,7 +103,15 @@ void Cube::draw(Camera cam, vector<Light> lights){
 
 }
 
-void Cube::addVert(vec4 v, vec4 c) {
+void Cube::addVert(vec4 v) {
 	vertices.push_back(v);
-	potentialColors.push_back(c);
+	potentialColors.push_back(randomColor());
+}
+
+vec4 Cube::randomColor() {
+	return vec4(randomFloat(), randomFloat(), randomFloat(), 1.0);
+}
+
+GLfloat Cube::randomFloat() {
+	return ((GLfloat) rand() / (RAND_MAX));
 }

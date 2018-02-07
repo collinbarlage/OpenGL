@@ -65,14 +65,14 @@ void init()
 
 	//scene
 	mbox = new Cube();
-	mbox->addVert(vec4(-0.5,-0.5,0.5,1), vec4(0,0,0,1));
-	mbox->addVert(vec4(-0.5,0.5,0.5,1), vec4(1,0,0,1));
-	mbox->addVert(vec4(0.5,0.5,0.5,1), vec4(0,1,0,1));
-	mbox->addVert(vec4(0.5,-0.5,0.5,1), vec4(0,0,1,1));
-	mbox->addVert(vec4(-0.5,-0.5,-0.5,1), vec4(1,1,0,1));
-	mbox->addVert(vec4(-0.5,0.5,-0.5,1), vec4(1,0,1,1));
-	mbox->addVert(vec4(0.5,0.5,-0.5,1), vec4(0,1,1,1));
-	mbox->addVert(vec4(0.5,-0.5,-0.5,1), vec4(0.5f,0.2f,0.4f,1));
+	mbox->addVert(vec4(-0.5,-0.5,0.5,1));
+	mbox->addVert(vec4(-0.5,0.5,0.5,1));
+	mbox->addVert(vec4(0.5,0.5,0.5,1));
+	mbox->addVert(vec4(0.5,-0.5,0.5,1));
+	mbox->addVert(vec4(-0.5,-0.5,-0.5,1));
+	mbox->addVert(vec4(-0.5,0.5,-0.5,1));
+	mbox->addVert(vec4(0.5,0.5,-0.5,1));
+	mbox->addVert(vec4(0.5,-0.5,-0.5,1));
 	mbox->init();
 	//mbox->setModelMatrix(RotateX(-10)*RotateY(10));
 
