@@ -6,6 +6,7 @@
 #include "Camera.h"
 #include "Light.h"
 #include <ctime>
+#include <cstdlib>
 #include <string>
 #include <vector>
 

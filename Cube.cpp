@@ -5,12 +5,11 @@ Cube::Cube() {
 }
 
 void Cube::init() {
-	srand(time(NULL));
 
 	//make room for colors and points
 	for(int i=0; i<vertices.size()*2*6; i++) {
-		points.push_back(vec4(0,0,0,0));
-		colors.push_back(randomColor());
+		points.push_back(vec4(0,0,0,1));
+		colors.push_back(vec4(0,1,1,1));
 	}
 
 	buildCube();

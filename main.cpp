@@ -2,6 +2,8 @@
 #include "Camera.h"  //for camera objects (for use in future assignments)
 #include "Light.h"	//for lights (for use in future assignments)
 #include "Cube.h"  //blue box object!
+#include <cstdlib>
+#include <ctime>
 
 //Forward declarations
 void init(void);
@@ -19,10 +21,13 @@ vector<Light> lights;
 vector<Drawable*>drawables;
 
 GLuint windowID=0;
+
+
 //----------------------------------------------------------------------------
 
 int main(int argc, char **argv)
 {
+	srand(time(NULL));
 	//initialize GLUT
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
