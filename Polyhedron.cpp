@@ -70,7 +70,7 @@ void Polyhedron::addVert(vec4 v) {
 }
 
 vec4 Polyhedron::randomColor() {
-	return vec4(randomFloat(), randomFloat(), randomFloat(), 1.0);
+	return vec4(randomFloat()+.01, randomFloat()+.1, randomFloat()+.04, 1.0);
 }
 
 GLfloat Polyhedron::randomFloat() {

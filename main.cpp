@@ -141,19 +141,19 @@ void keyboard(unsigned char key, int x, int y)
 void arrows(int key, int x, int y) {
 	switch (key) {
 	case GLUT_KEY_LEFT:
-		cam.move(.1,0,0);
-		break;
-
-	case GLUT_KEY_RIGHT:
 		cam.move(-.1,0,0);
 		break;
 
+	case GLUT_KEY_RIGHT:
+		cam.move(.1,0,0);
+		break;
+
 	case GLUT_KEY_UP:
-		cam.move(0,0,.1);
+		cam.move(0,0,-.1);
 		break;
 
 	case GLUT_KEY_DOWN:
-		cam.move(0,0,-.1);
+		cam.move(0,0,.1);
 		break;
 	}
 
