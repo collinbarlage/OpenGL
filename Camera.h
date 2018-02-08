@@ -4,9 +4,29 @@
 
 class Camera {
 public:
+	Camera();
+
+	mat4 projection;
 	mat4 cameraMatrix;
+	vec4 eye;
+	vec4 at;
+	vec4 up;
+	bool ortho;
+
 	void setCameraMatrix(mat4 cm) { cameraMatrix = cm; }
 	void move(GLfloat x, GLfloat y, GLfloat z);
+	void rotate(GLfloat x, GLfloat y, GLfloat z);
+
+	void toggleProj();
+
+	
+private:
+	
+	GLfloat xA;
+	GLfloat yA;
+	GLfloat zA;
+
+	void calcProj();
 };
 
 #endif

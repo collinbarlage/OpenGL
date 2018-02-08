@@ -54,7 +54,13 @@ void Polyhedron::draw(Camera cam, vector<Light> lights){
 	glUseProgram(program);  //also switch to using this shader program
 	glUniformMatrix4fv(mmLoc, 1, GL_TRUE,modelmatrix);
 	glUniformMatrix4fv(cmLoc, 1, GL_TRUE,cam.cameraMatrix);
-	glDrawArrays(GL_TRIANGLES, 0, points.size());
+	glDrawArrays(GL_TRIANGLES, 0, points.size()/2);
+
+	glLineWidth(3);
+
+	for(int i=points.size()/2; i<points.size(); i += 3) {
+		glDrawArrays(GL_LINE_LOOP, i, 3);
+	}
 
 }
 
@@ -273,4 +279,13 @@ void Polyhedron::buildPolyhedron() {
 	points.push_back(vec4(0.5,1,0.5,1)); colors.push_back(c);
 	points.push_back(vec4(-0.5,1,-0.5,1)); colors.push_back(c);
 	c = randomColor();
+
+	//make wireframe
+	int s = points.size();
+	for(int i=0; i<s; i++) {
+		points.push_back(points[i]+vec4(.001*abs(points[i].x)/points[i].x,
+			.001*abs(points[i].y)/points[i].y,
+			.001*abs(points[i].z)/points[i].z,0));
+		colors.push_back(vec4(0,0,0,1));
+	}
 }

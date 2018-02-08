@@ -12,14 +12,17 @@ void keyboard(unsigned char, int, int);
 void arrows(int key, int x, int y);
 void resize(int width, int height);
 void close(void);
+void timerCallback(int value);
+
 
 //Objects
 Polyhedron* mbox;
 Camera cam;
-mat4 projection = Perspective(20,1,.01,20);
 vector<Light> lights;
 vector<Drawable*>drawables;
 
+//Helpers
+bool animate = false;
 GLuint windowID=0;
 
 
@@ -55,6 +58,7 @@ int main(int argc, char **argv)
 	glutKeyboardFunc(keyboard);  //What to do if a keyboard event is detected
 	glutSpecialFunc(arrows);
 
+
 	//start the main event listening loop
 	glutMainLoop();
 	return 0;
@@ -65,8 +69,7 @@ void init()
 {
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 	glEnable(GL_DEPTH_TEST);
-	//cout << LookAt(vec4(1,1,1,1), vec4(0,0,0,1), vec4(0,1,0,1)) << endl;
-	cam.setCameraMatrix(projection*LookAt(vec4(5,5,5,1), vec4(0,0,0,1), vec4(0,1,0,1)));
+	//cam.setCameraMatrix(*LookAt(vec4(5,5,5,1), vec4(0,0,0,1), vec4(0,1,0,1)));
 
 	//scene
 	mbox = new Polyhedron();
@@ -103,23 +106,34 @@ void keyboard(unsigned char key, int x, int y)
 		close();
 		break;
 	case 'z': 
-		cam.setCameraMatrix(cam.cameraMatrix*RotateZ(-1));
+		cam.rotate(0,0,-1);
 		break;
 	case 'Z': 
-		cam.setCameraMatrix(cam.cameraMatrix*RotateZ(1));
+		cam.rotate(0,0,1);
 		break;
 	case 'c': 
-		cam.setCameraMatrix(cam.cameraMatrix*RotateY(-1));
+		cam.rotate(0,-1,0);
 		break;
 	case 'C': 
-		cam.setCameraMatrix(cam.cameraMatrix*RotateY(1));
+		cam.rotate(0,1,0);
 		break;
 	case 'x': 
-		cam.setCameraMatrix(cam.cameraMatrix*RotateX(-1));
+		cam.rotate(-1,0,0);
 		break;
 	case 'X': 
-		cam.setCameraMatrix(cam.cameraMatrix*RotateX(1));
+		cam.rotate(1,0,0);
 		break;
+	case ' ': 
+		//Rotation animation
+		animate = !animate; //toggle
+		glutTimerFunc(1, timerCallback, 0);
+
+		break;
+	case 'p': case 'P':
+		cout << "wat " <<endl;
+		cam.toggleProj();
+		break;
+
 	}
 	display();
 }
@@ -144,6 +158,23 @@ void arrows(int key, int x, int y) {
 	}
 
 	display();
+}
+
+//----------------------------------------------------------------------------
+//Timer  callback
+void timerCallback(int value) {
+	vec2 pos;
+	//Rotate all objects
+	for(int i=0; i<drawables.size(); i++) {
+		//pos = drawables[i]->position;
+		//rotate
+		drawables[i]->setModelMatrix(RotateY(1));
+	}
+	//continue rotating unless spacebar was pressed to toggle animation
+	if (animate) {
+		glutTimerFunc(10, timerCallback, 0);
+		glutPostRedisplay();
+	}
 }
 
 void close(){
