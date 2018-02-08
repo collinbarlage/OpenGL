@@ -69,7 +69,6 @@ void init()
 {
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 	glEnable(GL_DEPTH_TEST);
-	//cam.setCameraMatrix(*LookAt(vec4(5,5,5,1), vec4(0,0,0,1), vec4(0,1,0,1)));
 
 	//scene
 	mbox = new Polyhedron();
@@ -130,7 +129,6 @@ void keyboard(unsigned char key, int x, int y)
 
 		break;
 	case 'p': case 'P':
-		cout << "wat " <<endl;
 		cam.toggleProj();
 		break;
 

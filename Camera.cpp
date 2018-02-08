@@ -7,7 +7,7 @@ Camera::Camera() {
 	ortho = false;
 
 	xA = 0;
-	yA = 1.5707963267948966;
+	yA = 0;
 	zA = 0;
 
 	eye = vec4(2,2,2,1);
