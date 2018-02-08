@@ -66,18 +66,11 @@ void init()
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 	glEnable(GL_DEPTH_TEST);
 	//cout << LookAt(vec4(1,1,1,1), vec4(0,0,0,1), vec4(0,1,0,1)) << endl;
-	cam.setCameraMatrix(projection*LookAt(vec4(0,3,3,1), vec4(0,0,0,1), vec4(0,1,0,1)));
+	cam.setCameraMatrix(projection*LookAt(vec4(5,5,5,1), vec4(0,0,0,1), vec4(0,1,0,1)));
 
 	//scene
 	mbox = new Cube();
-	mbox->addVert(vec4(-0.5,-0.5,0.5,1));
-	mbox->addVert(vec4(-0.5,0.5,0.5,1));
-	mbox->addVert(vec4(0.5,0.5,0.5,1));
-	mbox->addVert(vec4(0.5,-0.5,0.5,1));
-	mbox->addVert(vec4(-0.5,-0.5,-0.5,1));
-	mbox->addVert(vec4(-0.5,0.5,-0.5,1));
-	mbox->addVert(vec4(0.5,0.5,-0.5,1));
-	mbox->addVert(vec4(0.5,-0.5,-0.5,1));
+
 	mbox->init();
 	//mbox->setModelMatrix(RotateX(-10)*RotateY(10));
 

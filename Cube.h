@@ -26,7 +26,7 @@ public:
 	void draw(Camera, vector<Light>);
 
 private:
-	void buildCube();
+	void buildPolyhedron();
 	void makeQuad(int, int, int, int);
 	GLuint vPosition;
 	GLuint vColor;
