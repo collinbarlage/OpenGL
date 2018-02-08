@@ -1,19 +1,13 @@
 # OpenGL 🔥
-CS432 hw2
+CS432 hw3
 Collin Barlage  
-1/31/2018
+2/18/2018
 
-##HW2 NOTES - Change Log
+##HW3 NOTES - Change Log
 
-* Moved all vertex and point data to the Shape class
+* Reverted to the 3D sample code
 
-* Allow for dynamically adding objects
-
-* Alter shape class to have uniform *and* multicolor shading
-
-* Introduce homogenius points for translations
-
-* Use timer callback to to animate points and brightness
+* Abstracted the cuble class to a polyheadron
 
 ## Features
 
