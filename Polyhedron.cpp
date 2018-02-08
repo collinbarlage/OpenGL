@@ -1,10 +1,10 @@
-#include "Cube.h"
+#include "Polyhedron.h"
 
-Cube::Cube() {
+Polyhedron::Polyhedron() {
 
 }
 
-void Cube::init() {
+void Polyhedron::init() {
 	
 	buildPolyhedron();
 
@@ -17,7 +17,7 @@ void Cube::init() {
 	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(points)*points.size(), &points[0]);
 	glBufferSubData(GL_ARRAY_BUFFER, sizeof(points)*points.size(), sizeof(colors)*colors.size(), &colors[0]);
 
-	//set up stuff for the body of the cube
+	//set up stuff for the body of the Polyhedron
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO); //make this VAO active
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);  //associate the VBO with the active VAO
@@ -41,15 +41,15 @@ void Cube::init() {
 
 }
 
-Cube::~Cube(){
+Polyhedron::~Polyhedron(){
 
 }
 
 //----------------------------------------------------------------------------
 
 
-void Cube::draw(Camera cam, vector<Light> lights){
-	//Draw the cube body
+void Polyhedron::draw(Camera cam, vector<Light> lights){
+	//Draw the Polyhedron body
 	glBindVertexArray(VAO);
 	glUseProgram(program);  //also switch to using this shader program
 	glUniformMatrix4fv(mmLoc, 1, GL_TRUE,modelmatrix);
@@ -58,23 +58,23 @@ void Cube::draw(Camera cam, vector<Light> lights){
 
 }
 
-void Cube::addVert(vec4 v) {
+void Polyhedron::addVert(vec4 v) {
 	vertices.push_back(v);
 	potentialColors.push_back(randomColor());
 }
 
-vec4 Cube::randomColor() {
+vec4 Polyhedron::randomColor() {
 	return vec4(randomFloat(), randomFloat(), randomFloat(), 1.0);
 }
 
-GLfloat Cube::randomFloat() {
+GLfloat Polyhedron::randomFloat() {
 	return ((GLfloat) rand() / (RAND_MAX));
 }
 
 
 
 
-void Cube::buildPolyhedron() {
+void Polyhedron::buildPolyhedron() {
 	vec4 c = randomColor();
 	points.push_back(vec4(0.5,0.5,-1,1)); colors.push_back(c);
 	points.push_back(vec4(0.5,-0.5,-1,1)); colors.push_back(c);

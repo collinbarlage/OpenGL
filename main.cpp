@@ -1,7 +1,7 @@
 #include "Angel.h"  //includes gl.h, glut.h and other stuff...
 #include "Camera.h"  //for camera objects (for use in future assignments)
 #include "Light.h"	//for lights (for use in future assignments)
-#include "Cube.h"  //blue box object!
+#include "Polyhedron.h"  //blue box object!
 #include <cstdlib>
 #include <ctime>
 
@@ -14,7 +14,7 @@ void resize(int width, int height);
 void close(void);
 
 //Objects
-Cube* mbox;
+Polyhedron* mbox;
 Camera cam;
 mat4 projection = Perspective(20,1,.01,20);
 vector<Light> lights;
@@ -69,7 +69,7 @@ void init()
 	cam.setCameraMatrix(projection*LookAt(vec4(5,5,5,1), vec4(0,0,0,1), vec4(0,1,0,1)));
 
 	//scene
-	mbox = new Cube();
+	mbox = new Polyhedron();
 
 	mbox->init();
 	//mbox->setModelMatrix(RotateX(-10)*RotateY(10));

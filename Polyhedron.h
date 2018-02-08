@@ -1,5 +1,5 @@
-#ifndef __CUBE_H__
-#define __CUBE_H__
+#ifndef __Polyhedron_H__
+#define __Polyhedron_H__
 
 #include "Angel.h"
 #include "Drawable.h"
@@ -12,14 +12,14 @@
 
 using namespace std;
 
-class Cube: public Drawable{
+class Polyhedron: public Drawable{
 
 
 public:
-	Cube();
-	~Cube();
+	Polyhedron();
+	~Polyhedron();
 
-	Cube(vector<vec4> verts);
+	Polyhedron(vector<vec4> verts);
 
 	void init();
 	void addVert(vec4 v);
