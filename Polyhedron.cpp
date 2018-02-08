@@ -185,6 +185,7 @@ void Polyhedron::buildPolyhedron() {
 	points.push_back(vec4(0.5,-0.5,1,1)); colors.push_back(c);
 	points.push_back(vec4(-0.5,-0.5,1,1)); colors.push_back(c);
 	points.push_back(vec4(-0.5,-1,0.5,1)); colors.push_back(c);
+	c = randomColor();
 		
 	points.push_back(vec4(-0.5,0.5,1,1)); colors.push_back(c);
 	points.push_back(vec4(-0.5,1,0.5,1)); colors.push_back(c);
