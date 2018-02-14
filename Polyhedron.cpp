@@ -1,12 +1,12 @@
 #include "Polyhedron.h"
 
 Polyhedron::Polyhedron() {
-
+	wireframe = false;
 }
 
 void Polyhedron::init() {
 	
-	buildPolyhedron();
+	//buildPolyhedron();
 
 	//get buffers for attributes and indices
 	glGenBuffers(1, &VBO);
@@ -54,19 +54,26 @@ void Polyhedron::draw(Camera cam, vector<Light> lights){
 	glUseProgram(program);  //also switch to using this shader program
 	glUniformMatrix4fv(mmLoc, 1, GL_TRUE,modelmatrix);
 	glUniformMatrix4fv(cmLoc, 1, GL_TRUE,cam.cameraMatrix);
-	glDrawArrays(GL_TRIANGLES, 0, points.size()/2);
 
-	glLineWidth(3);
-
-	for(int i=points.size()/2; i<points.size(); i += 3) {
-		glDrawArrays(GL_LINE_LOOP, i, 3);
+	if(wireframe) {
+		glDrawArrays(GL_TRIANGLES, 0, points.size()/2);
+		glLineWidth(3);
+		for(int i=points.size()/2; i<points.size(); i += 3)
+			glDrawArrays(GL_LINE_LOOP, i, 3);
+	} else {
+		glDrawArrays(GL_TRIANGLES, 0, points.size());
 	}
 
 }
 
 void Polyhedron::addVert(vec4 v) {
-	vertices.push_back(v);
-	potentialColors.push_back(randomColor());
+	points.push_back(v);
+	colors.push_back(randomColor());
+}
+
+void Polyhedron::addVert(vec4 v, vec4 c) {
+	points.push_back(v);
+	colors.push_back(c);
 }
 
 vec4 Polyhedron::randomColor() {
@@ -78,7 +85,17 @@ GLfloat Polyhedron::randomFloat() {
 }
 
 
-
+void Polyhedron::makeWireframe() {
+	wireframe = true;
+	//make wireframe
+	int s = points.size();
+	for(int i=0; i<s; i++) {
+		points.push_back(points[i]+vec4(.001*abs(points[i].x)/points[i].x,
+			.001*abs(points[i].y)/points[i].y,
+			.001*abs(points[i].z)/points[i].z,0));
+		colors.push_back(vec4(0,0,0,1));
+	}
+}
 
 void Polyhedron::buildPolyhedron() {
 	vec4 c = randomColor();
@@ -281,12 +298,5 @@ void Polyhedron::buildPolyhedron() {
 	points.push_back(vec4(-0.5,1,-0.5,1)); colors.push_back(c);
 	c = randomColor();
 
-	//make wireframe
-	int s = points.size();
-	for(int i=0; i<s; i++) {
-		points.push_back(points[i]+vec4(.001*abs(points[i].x)/points[i].x,
-			.001*abs(points[i].y)/points[i].y,
-			.001*abs(points[i].z)/points[i].z,0));
-		colors.push_back(vec4(0,0,0,1));
-	}
+	
 }

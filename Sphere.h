@@ -1,5 +1,5 @@
-#ifndef __Polyhedron_H__
-#define __Polyhedron_H__
+#ifndef __SPHERE_H__
+#define __SPHERE_H__
 
 #include "Angel.h"
 #include "Drawable.h"
@@ -12,14 +12,13 @@
 
 using namespace std;
 
-class Polyhedron: public Drawable{
+class Sphere: public Drawable{
 
 
 public:
-	Polyhedron();
-	~Polyhedron();
-
-	Polyhedron(vector<vec4> verts);
+	Sphere();
+	Sphere(unsigned int i);
+	~Sphere();
 
 	void init();
 	void addVert(vec4 v);
@@ -28,8 +27,10 @@ public:
 	void makeWireframe();
 
 private:
-	void buildPolyhedron();
-	void makeQuad(int, int, int, int);
+	void buildSphere();
+	void makeTriangle(vec4 a, vec4 b, vec4 c);
+	void divideTriangle(vec4 a, vec4 b, vec4 c, int i);
+	vec4 norm(vec4 p);
 	GLuint vPosition;
 	GLuint vColor;
 	GLuint mmLoc;
@@ -39,10 +40,8 @@ private:
 	GLfloat randomFloat();
 
 	unsigned int index;
+	unsigned int numVerts;
 	bool wireframe;
-
-	vector<vec4> vertices;
-	vector<vec4> potentialColors;
 
 	vector<vec4> points; //6 faces, 2 triangles/face, 3 vertices per triangle
 	vector<vec4> colors;

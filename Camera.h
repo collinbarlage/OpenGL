@@ -5,6 +5,7 @@
 class Camera {
 public:
 	Camera();
+	Camera(vec4 eye, vec4 up);
 
 	mat4 projection;
 	mat4 cameraMatrix;

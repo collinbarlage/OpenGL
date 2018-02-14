@@ -2,6 +2,7 @@
 #include "Camera.h"  //for camera objects (for use in future assignments)
 #include "Light.h"	//for lights (for use in future assignments)
 #include "Polyhedron.h"  //blue box object!
+#include "Sphere.h"  //a ball!?
 #include <cstdlib>
 #include <ctime>
 
@@ -17,12 +18,14 @@ void timerCallback(int value);
 
 //Objects
 Polyhedron* mbox;
-Camera cam;
+Sphere* sphere;
+Camera cam1 = Camera(vec4(0,0,2,1), vec4(0,1,0,1));
+Camera cam2 = Camera(vec4(0,10,0,1), vec4(0,0,-1,1));
 vector<Light> lights;
 vector<Drawable*>drawables;
 
 //Helpers
-bool animate = false;
+bool camSelect = false;
 GLuint windowID=0;
 
 
@@ -71,12 +74,27 @@ void init()
 	glEnable(GL_DEPTH_TEST);
 
 	//scene
+
+	//floor plane
 	mbox = new Polyhedron();
+	mbox->addVert(vec4(1,0,1,1), vec4(.7,.8,.8,1));
+	mbox->addVert(vec4(1,0,-1,1), vec4(.7,.8,.8,1));
+	mbox->addVert(vec4(-1,0,-1,1), vec4(.7,.8,.8,1));
 
+	mbox->addVert(vec4(-1,0,1,1), vec4(.7,.8,.8,1));
+	mbox->addVert(vec4(1,0,1,1), vec4(.7,.8,.8,1));
+	mbox->addVert(vec4(-1,0,-1,1), vec4(.7,.8,.8,1));
 	mbox->init();
-	//mbox->setModelMatrix(RotateX(-10)*RotateY(10));
-
+	//mbox->setModelMatrix(Translate(0,1,-4));
 	drawables.push_back(mbox);
+
+
+	//sphere
+	sphere = new Sphere(64);
+	sphere->init();
+	drawables.push_back(sphere);
+
+
 
 }
 
@@ -86,8 +104,16 @@ void display( void )
 {
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
+	//use correct camera
+	Camera camera;
+	if(camSelect) {
+		camera = cam2;
+	} else {
+		camera = cam1;
+	}
+
 	for (unsigned int i = 0; i < drawables.size(); i++)
-		drawables[i]->draw(cam, lights);
+		drawables[i]->draw(camera, lights);
 	glutSwapBuffers();
 }
 
@@ -105,31 +131,31 @@ void keyboard(unsigned char key, int x, int y)
 		close();
 		break;
 	case 'z': 
-		cam.rotate(0,0,-1);
+		cam1.rotate(0,0,-1);
 		break;
 	case 'Z': 
-		cam.rotate(0,0,1);
+		cam1.rotate(0,0,1);
 		break;
 	case 'c': 
-		cam.rotate(0,-1,0);
+		cam1.rotate(0,-1,0);
 		break;
 	case 'C': 
-		cam.rotate(0,1,0);
+		cam1.rotate(0,1,0);
 		break;
 	case 'x': 
-		cam.rotate(-1,0,0);
+		cam1.rotate(-1,0,0);
 		break;
 	case 'X': 
-		cam.rotate(1,0,0);
+		cam1.rotate(1,0,0);
 		break;
 	case ' ': 
-		//Rotation animation
-		animate = !animate; //toggle
-		glutTimerFunc(1, timerCallback, 0);
+		//Camera toggle
+		camSelect = !camSelect; //toggle
+		//glutTimerFunc(1, timerCallback, 0);
 
 		break;
 	case 'p': case 'P':
-		cam.toggleProj();
+		cam1.toggleProj();
 		break;
 
 	}
@@ -139,19 +165,19 @@ void keyboard(unsigned char key, int x, int y)
 void arrows(int key, int x, int y) {
 	switch (key) {
 	case GLUT_KEY_LEFT:
-		cam.move(-.1,0,0);
+		cam1.move(-.1,0,0);
 		break;
 
 	case GLUT_KEY_RIGHT:
-		cam.move(.1,0,0);
+		cam1.move(.1,0,0);
 		break;
 
 	case GLUT_KEY_UP:
-		cam.move(0,0,-.1);
+		cam1.move(0,0,-.1);
 		break;
 
 	case GLUT_KEY_DOWN:
-		cam.move(0,0,.1);
+		cam1.move(0,0,.1);
 		break;
 	}
 
@@ -169,10 +195,10 @@ void timerCallback(int value) {
 		drawables[i]->setModelMatrix(RotateY(1));
 	}
 	//continue rotating unless spacebar was pressed to toggle animation
-	if (animate) {
-		glutTimerFunc(10, timerCallback, 0);
-		glutPostRedisplay();
-	}
+	//if (animate) {
+		//glutTimerFunc(10, timerCallback, 0);
+		//glutPostRedisplay();
+	//}
 }
 
 void close(){

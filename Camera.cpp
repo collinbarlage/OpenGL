@@ -1,7 +1,10 @@
 #include "Camera.h"
 
-
 Camera::Camera() {
+
+}
+
+Camera::Camera(vec4 e, vec4 u) {
 
 	projection = Perspective(65,1,1,100);
 	ortho = false;
@@ -10,9 +13,9 @@ Camera::Camera() {
 	yA = 0;
 	zA = 0;
 
-	eye = vec4(2,2,2,1);
+	eye = e;
 	at  = vec4(0,0,0,1);
-	up  = vec4(0,1,0,1);
+	up  = u;
 
 	setCameraMatrix(projection*LookAt(eye, at, up));
 }
