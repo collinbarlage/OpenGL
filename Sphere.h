@@ -24,12 +24,14 @@ public:
 	void addVert(vec4 v);
 	void addVert(vec4 v, vec4 c);
 	void draw(Camera, vector<Light>);
+	void pick(vec4 probe, vec4 eye);
 	void makeWireframe();
 
 private:
 	void buildSphere();
 	void makeTriangle(vec4 a, vec4 b, vec4 c);
 	void divideTriangle(vec4 a, vec4 b, vec4 c, int i);
+	bool intersects(vec4 ray, vec4 eye, vec4 a, vec4 b, vec4 c);
 	vec4 norm(vec4 p);
 	GLuint vPosition;
 	GLuint vColor;

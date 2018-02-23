@@ -72,6 +72,56 @@ void Sphere::draw(Camera cam, vector<Light> lights){
 
 }
 
+void Sphere::pick(vec4 probe, vec4 eye) {
+	cout << probe << endl;
+
+	for(int i=0; i<points.size(); i+=3) {
+		if(intersects(probe, eye, points[i], points[i+1], points[i+2])) {
+			colors[i] = colors[i+1] = colors[i+2] = vec4(0, 0, 0, 1);
+			cout << "AYYYY " << i << endl;
+		}
+	}
+
+	//set up stuff for the body of the Sphere
+	glBindVertexArray(VAO); //make this VAO active
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);  //associate the VBO with the active VAO
+}
+
+bool Sphere::intersects(vec4 ray, vec4 eye, vec4 a, vec4 b, vec4 c) {
+	ray.w = 1;
+
+	//Möller–Trumbore intersection algorithm
+	//shouts out to Tomas Möller and Ben Trumbore for thinking this one up
+	vec4 edge1 = b - a;
+	vec4 edge2 = c - a;
+	vec4 h = cross(ray, edge2);
+	float d = dot(edge1, h);
+	if(d > -0.0000001 && d < 0.0000001) {
+		return false;
+	}
+	float f = 1/d;
+	vec4 s = eye - a;
+	float u = f * dot(s, h);
+	if(u < 0 || u  > 1) {
+
+		return false;
+	}
+	vec4 q = cross(s, edge1);
+	float v = f * dot(eye, q);
+	if(v < 0 || u+v > 1) {
+
+		return false;
+	}
+	float t = f * dot(edge2, q);
+	if(t > 0.0000001) {
+		return true;
+	} else {
+		cout << "wtf..." << endl;
+		return false;
+	}
+
+}
+
 void Sphere::addVert(vec4 v) {
 	points.push_back(v);
 	colors.push_back(randomColor());

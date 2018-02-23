@@ -11,6 +11,7 @@ void init(void);
 void display(void);
 void keyboard(unsigned char, int, int);
 void arrows(int key, int x, int y);
+void click(int button, int state, int x, int y);
 void resize(int width, int height);
 void close(void);
 void timerCallback(int value);
@@ -26,6 +27,8 @@ vector<Drawable*>drawables;
 
 //Helpers
 bool camSelect = false;
+mat4 getCameraMatrix();
+vec4 getCameraEye();
 GLuint windowID=0;
 
 
@@ -60,7 +63,7 @@ int main(int argc, char **argv)
 	glutWMCloseFunc(close);
 	glutKeyboardFunc(keyboard);  //What to do if a keyboard event is detected
 	glutSpecialFunc(arrows);
-
+	glutMouseFunc(click);
 
 	//start the main event listening loop
 	glutMainLoop();
@@ -77,24 +80,22 @@ void init()
 
 	//floor plane
 	mbox = new Polyhedron();
-	mbox->addVert(vec4(1,0,1,1), vec4(.7,.8,.8,1));
-	mbox->addVert(vec4(1,0,-1,1), vec4(.7,.8,.8,1));
-	mbox->addVert(vec4(-1,0,-1,1), vec4(.7,.8,.8,1));
+	mbox->addVert(vec4(10,-2,10,1), vec4(0,1,0,1));
+	mbox->addVert(vec4(10,-2,-10,1), vec4(0,1,0,1));
+	mbox->addVert(vec4(-10,-2,-10,1), vec4(0,1,0,1));
 
-	mbox->addVert(vec4(-1,0,1,1), vec4(.7,.8,.8,1));
-	mbox->addVert(vec4(1,0,1,1), vec4(.7,.8,.8,1));
-	mbox->addVert(vec4(-1,0,-1,1), vec4(.7,.8,.8,1));
+	mbox->addVert(vec4(-10,-2,10,1), vec4(0,1,0,1));
+	mbox->addVert(vec4(10,-2,10,1), vec4(0,1,0,1));
+	mbox->addVert(vec4(-10,-2,-10,1), vec4(0,1,0,1));
 	mbox->init();
-	//mbox->setModelMatrix(Translate(0,1,-4));
+	mbox->setModelMatrix(Translate(0,1,-4));
 	drawables.push_back(mbox);
-
 
 	//sphere
 	sphere = new Sphere(64);
 	sphere->init();
+	sphere->setModelMatrix(Translate(0,1,-4));
 	drawables.push_back(sphere);
-
-
 
 }
 
@@ -162,6 +163,32 @@ void keyboard(unsigned char key, int x, int y)
 	display();
 }
 
+void click(int button, int state, int x, int y) {
+	float xp, yp;
+
+	if(state == 0) {
+		//cout << "CLICKED at " << x << ", " << y << endl;
+		xp = (2*float(x)/512)-1;
+		yp = 1-(2*float(y)/512);
+		//cout << "xp = " << xp << "yp = " << yp << endl;
+		vec4 pFront = vec4(xp, yp, -1, 1);
+		vec4 pCam = inverse(getCameraMatrix())*pFront;
+		vec4 pWorld = inverse(getCameraMatrix())*pCam;
+		vec4 rayWorld = pWorld - getCameraEye();
+
+		mbox = new Polyhedron();
+		mbox->addVert(vec4(rayWorld.x,rayWorld.y,rayWorld.z,1), vec4(0,1,1,1));
+		mbox->addVert(vec4(getCameraEye().x, getCameraEye().y,getCameraEye().z, 1), vec4(0,1,1,1));
+		mbox->addVert(vec4(0,1,-4,1), vec4(0,1,1,1));
+
+		mbox->init();
+		mbox->setModelMatrix(Translate(0,1,-4));
+		drawables.push_back(mbox);
+		drawables[1]->pick(rayWorld, getCameraEye());
+		display();
+	}	
+}
+
 void arrows(int key, int x, int y) {
 	switch (key) {
 	case GLUT_KEY_LEFT:
@@ -209,4 +236,20 @@ void close(){
 			glutDestroyWindow(windowID);
 
     exit(EXIT_SUCCESS);
+}
+
+mat4 getCameraMatrix(){
+	if(camSelect) {
+		return cam2.cameraMatrix;
+	} else {
+		return cam1.cameraMatrix;
+	}
+}
+
+vec4 getCameraEye(){
+	if(camSelect) {
+		return cam2.eye;
+	} else {
+		return cam1.eye;
+	}
 }

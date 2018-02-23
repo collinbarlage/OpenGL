@@ -7,6 +7,7 @@ Polyhedron::Polyhedron() {
 void Polyhedron::init() {
 	
 	//buildPolyhedron();
+	//makeWireframe();
 
 	//get buffers for attributes and indices
 	glGenBuffers(1, &VBO);
@@ -63,6 +64,10 @@ void Polyhedron::draw(Camera cam, vector<Light> lights){
 	} else {
 		glDrawArrays(GL_TRIANGLES, 0, points.size());
 	}
+
+}
+
+void Polyhedron::pick(vec4 probe, vec4 eye) {
 
 }
 
@@ -300,3 +305,4 @@ void Polyhedron::buildPolyhedron() {
 
 	
 }
+

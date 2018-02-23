@@ -25,6 +25,7 @@ public:
 	void addVert(vec4 v);
 	void addVert(vec4 v, vec4 c);
 	void draw(Camera, vector<Light>);
+	void pick(vec4 probe, vec4 eye);
 	void makeWireframe();
 
 private:
