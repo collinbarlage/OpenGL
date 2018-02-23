@@ -1,13 +1,15 @@
 # OpenGL 🔥
-CS432 hw3
+CS432 hw4
 Collin Barlage  
-2/18/2018
+2/22/2018
 
-##HW3 NOTES - Change Log
+##HW4 NOTES - Change Log
 
-* Reverted to the 3D sample code
+* Added 2nd camera
 
-* Abstracted the cuble class to a polyheadron
+* Added ground plane
+
+* Implemented sphere
 
 ## Features
 

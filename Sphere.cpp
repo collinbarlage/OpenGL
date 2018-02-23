@@ -82,9 +82,6 @@ void Sphere::pick(vec4 probe, vec4 eye) {
 		}
 	}
 
-	//set up stuff for the body of the Sphere
-	glBindVertexArray(VAO); //make this VAO active
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);  //associate the VBO with the active VAO
 }
 
 bool Sphere::intersects(vec4 ray, vec4 eye, vec4 a, vec4 b, vec4 c) {

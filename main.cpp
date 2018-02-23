@@ -176,14 +176,6 @@ void click(int button, int state, int x, int y) {
 		vec4 pWorld = inverse(getCameraMatrix())*pCam;
 		vec4 rayWorld = pWorld - getCameraEye();
 
-		mbox = new Polyhedron();
-		mbox->addVert(vec4(rayWorld.x,rayWorld.y,rayWorld.z,1), vec4(0,1,1,1));
-		mbox->addVert(vec4(getCameraEye().x, getCameraEye().y,getCameraEye().z, 1), vec4(0,1,1,1));
-		mbox->addVert(vec4(0,1,-4,1), vec4(0,1,1,1));
-
-		mbox->init();
-		mbox->setModelMatrix(Translate(0,1,-4));
-		drawables.push_back(mbox);
 		drawables[1]->pick(rayWorld, getCameraEye());
 		display();
 	}	
