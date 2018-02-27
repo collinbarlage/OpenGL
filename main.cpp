@@ -20,7 +20,7 @@ void timerCallback(int value);
 //Objects
 Polyhedron* mbox;
 Sphere* sphere;
-Camera cam1 = Camera(vec4(0,0,2,1), vec4(0,1,0,1));
+Camera cam1 = Camera(vec4(2,2,0,1), vec4(0,1,0,1));
 Camera cam2 = Camera(vec4(0,10,0,1), vec4(0,0,-1,1));
 vector<Light> lights;
 vector<Drawable*>drawables;
@@ -88,13 +88,13 @@ void init()
 	mbox->addVert(vec4(10,-2,10,1), vec4(0,1,0,1));
 	mbox->addVert(vec4(-10,-2,-10,1), vec4(0,1,0,1));
 	mbox->init();
-	mbox->setModelMatrix(Translate(0,1,-4));
+	//mbox->setModelMatrix(Translate(0,1,-4));
 	drawables.push_back(mbox);
 
 	//sphere
 	sphere = new Sphere(64);
 	sphere->init();
-	sphere->setModelMatrix(Translate(0,1,-4));
+	//sphere->setModelMatrix(Translate(0,1,-4));
 	drawables.push_back(sphere);
 
 }
