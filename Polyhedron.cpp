@@ -6,39 +6,46 @@ Polyhedron::Polyhedron() {
 
 void Polyhedron::init() {
 	
-	//buildPolyhedron();
-	//makeWireframe();
+	calcNormals();
 
 	//get buffers for attributes and indices
 	glGenBuffers(1, &VBO);
+	assert((program = InitShader("vshader00_v150.glsl", "fshader00_v150.glsl"))!=-1);
+	glUseProgram(program);  //make it the active one
+	
+	//get vData
+	assert((vPosition = glGetAttribLocation(program, "vPosition")) != -1);
+	assert((vNormal = glGetAttribLocation(program, "vNormal"))!=-1);
+
+	//get light location
+	diffuse_loc = glGetUniformLocation(program, "matDiffuse");
+	spec_loc = glGetUniformLocation(program, "matSpecular");
+	ambient_loc = glGetUniformLocation(program, "matAmbient");
+	alpha_loc = glGetUniformLocation(program, "matAlpha");
+
+	//get the location of the model matrix
+	assert((mmLoc = glGetUniformLocation(program, "model_matrix")) != -1);
+	assert((cmLoc = glGetUniformLocation(program, "camera_matrix")) != -1);
+	assert((pmLoc = glGetUniformLocation(program, "proj_matrix")) != -1);
 
 	//put the data on the VBO
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(points)*points.size() + sizeof(colors)*colors.size(), NULL, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(points)*points.size()*2, NULL, GL_STATIC_DRAW);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(points)*points.size(), &points[0]);
-	glBufferSubData(GL_ARRAY_BUFFER, sizeof(points)*points.size(), sizeof(colors)*colors.size(), &colors[0]);
+	glBufferSubData(GL_ARRAY_BUFFER, sizeof(points)*points.size(), sizeof(points)*points.size(), &normals[0]);
 
 	//set up stuff for the body of the Polyhedron
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO); //make this VAO active
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);  //associate the VBO with the active VAO
 
-	assert((program = InitShader("vshader00_v150.glsl", "fshader00_v150.glsl"))!=-1);
-	glUseProgram(program);  //make it the active one
-
-	assert((vPosition = glGetAttribLocation(program, "vPosition")) != -1);
 	glEnableVertexAttribArray(vPosition);  //enable it
 	glVertexAttribPointer(vPosition, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
 
 	//get the location of the uniform color in the shader
-	assert((vColor = glGetAttribLocation(program, "vColor"))!=-1);
-	glEnableVertexAttribArray(vColor);
-	glVertexAttribPointer(vColor, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeof(points)*points.size()));
+	glEnableVertexAttribArray(vNormal);
+	glVertexAttribPointer(vNormal, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeof(points)*points.size()));
 
-	//get the location of the model matrix
-	assert((mmLoc = glGetUniformLocation(program, "model_matrix")) != -1);
-	assert((cmLoc = glGetUniformLocation(program, "camera_matrix")) != -1);
-	
 
 }
 
@@ -55,25 +62,43 @@ void Polyhedron::draw(Camera cam, vector<Light> lights){
 	glUseProgram(program);  //also switch to using this shader program
 	glUniformMatrix4fv(mmLoc, 1, GL_TRUE,modelmatrix);
 	glUniformMatrix4fv(cmLoc, 1, GL_TRUE,cam.cameraMatrix);
+	glUniformMatrix4fv(pmLoc, 1, GL_TRUE,cam.projection);
+	glUniform4fv(diffuse_loc, 1, vec4(0.431, 0.557, 0.325,1));
+	glUniform4fv(spec_loc, 1, vec4(0.431, 0.557, 0.325,1));
+	glUniform4fv(ambient_loc, 1, vec4(0.431, 0.557, 0.325,1));
+	glUniform1f(alpha_loc, 100);
+	GLuint light_loc = glGetUniformLocation(program, "lightPos");
+	glUniform4fv(light_loc, 1, lights[0].getPosition());
+	GLuint ambient_loc2 = glGetUniformLocation(program, "lightAmbient");
+	glUniform4fv(ambient_loc2, 1, lights[0].getAmbient());
+	GLuint diffuse_loc2 = glGetUniformLocation(program, "lightDiffuse");
+	glUniform4fv(diffuse_loc2, 1, lights[0].getDiffuse());
+	GLuint specular_loc2 = glGetUniformLocation(program, "lightSpecular");
+	glUniform4fv(specular_loc2, 1, lights[0].getSpecular());
 
-	if(wireframe) {
-		glDrawArrays(GL_TRIANGLES, 0, points.size()/2);
-		glLineWidth(3);
-		for(int i=points.size()/2; i<points.size(); i += 3)
-			glDrawArrays(GL_LINE_LOOP, i, 3);
-	} else {
+	//if(wireframe) {
+		//glDrawArrays(GL_TRIANGLES, 0, points.size()/2);
+		//glLineWidth(3);
+		//for(int i=points.size()/2; i<points.size(); i += 3)
+			//glDrawArrays(GL_LINE_LOOP, i, 3);
+	//} else {
 		glDrawArrays(GL_TRIANGLES, 0, points.size());
+	//}
+}
+
+void Polyhedron::calcNormals() {
+	for(int i=0; i<points.size(); i+=3) {
+		vec3 N = normalize(cross(points[i+1]-points[i],points[i+2]-points[i]));
+		normals.push_back(N); normals.push_back(N); normals.push_back(N);
 	}
-
 }
 
-void Polyhedron::pick(vec4 probe, vec4 eye) {
 
-}
 
 void Polyhedron::addVert(vec4 v) {
 	points.push_back(v);
-	colors.push_back(randomColor());
+	//colors.push_back(randomColor());
+
 }
 
 void Polyhedron::addVert(vec4 v, vec4 c) {
@@ -100,6 +125,10 @@ void Polyhedron::makeWireframe() {
 			.001*abs(points[i].z)/points[i].z,0));
 		colors.push_back(vec4(0,0,0,1));
 	}
+}
+
+void Polyhedron::pick(vec4 probe, vec4 eye) {
+
 }
 
 void Polyhedron::buildPolyhedron() {

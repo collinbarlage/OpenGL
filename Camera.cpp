@@ -17,7 +17,7 @@ Camera::Camera(vec4 e, vec4 u) {
 	at  = vec4(0,0,0,1);
 	up  = u;
 
-	setCameraMatrix(projection*LookAt(eye, at, up));
+	setCameraMatrix(LookAt(eye, at, up));
 }
 
 void Camera::move(GLfloat x, GLfloat y, GLfloat z) {
@@ -45,7 +45,7 @@ void Camera::toggleProj() {
 }
 
 void Camera::calcProj() {
-	setCameraMatrix(projection*LookAt(eye, at, up));
+	setCameraMatrix(LookAt(eye, at, up));
 	setCameraMatrix(cameraMatrix*RotateX(xA)*RotateY(yA)*RotateZ(zA));
 
 }

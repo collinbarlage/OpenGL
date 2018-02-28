@@ -20,10 +20,13 @@ void timerCallback(int value);
 //Objects
 Polyhedron* mbox;
 Sphere* sphere;
-Camera cam1 = Camera(vec4(2,2,0,1), vec4(0,1,0,1));
+Camera cam1 = Camera(vec4(0,2,-2,1), vec4(0,1,0,1));
 Camera cam2 = Camera(vec4(0,10,0,1), vec4(0,0,-1,1));
-vector<Light> lights;
 vector<Drawable*>drawables;
+
+//Lights
+vector<Light> lights;
+
 
 //Helpers
 bool camSelect = false;
@@ -76,26 +79,30 @@ void init()
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 	glEnable(GL_DEPTH_TEST);
 
-	//scene
+//scene
+	//lights
+	Light sun = Light(vec4(2,10,-3,1),vec4(.9,.7,.5,1),vec4(1,1,1,1),vec4(.3,1,1,1));
+	lights.push_back(sun);
 
 	//floor plane
 	mbox = new Polyhedron();
-	mbox->addVert(vec4(10,-2,10,1), vec4(0,1,0,1));
-	mbox->addVert(vec4(10,-2,-10,1), vec4(0,1,0,1));
-	mbox->addVert(vec4(-10,-2,-10,1), vec4(0,1,0,1));
+	mbox->addVert(vec4(10,-2,10,1));
+	mbox->addVert(vec4(10,-2,-10,1));
+	mbox->addVert(vec4(-10,-2,-10,1));
 
-	mbox->addVert(vec4(-10,-2,10,1), vec4(0,1,0,1));
-	mbox->addVert(vec4(10,-2,10,1), vec4(0,1,0,1));
-	mbox->addVert(vec4(-10,-2,-10,1), vec4(0,1,0,1));
+	mbox->addVert(vec4(-10,-2,10,1));
+	mbox->addVert(vec4(10,-2,10,1));
+	mbox->addVert(vec4(-10,-2,-10,1));
 	mbox->init();
-	//mbox->setModelMatrix(Translate(0,1,-4));
 	drawables.push_back(mbox);
 
 	//sphere
 	sphere = new Sphere(64);
 	sphere->init();
-	//sphere->setModelMatrix(Translate(0,1,-4));
 	drawables.push_back(sphere);
+
+
+	
 
 }
 
@@ -105,16 +112,8 @@ void display( void )
 {
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-	//use correct camera
-	Camera camera;
-	if(camSelect) {
-		camera = cam2;
-	} else {
-		camera = cam1;
-	}
-
 	for (unsigned int i = 0; i < drawables.size(); i++)
-		drawables[i]->draw(camera, lights);
+		drawables[i]->draw(cam1, lights);
 	glutSwapBuffers();
 }
 

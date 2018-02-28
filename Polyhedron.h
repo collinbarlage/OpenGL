@@ -27,15 +27,23 @@ public:
 	void draw(Camera, vector<Light>);
 	void pick(vec4 probe, vec4 eye);
 	void makeWireframe();
+	void loadSmf(string filename);
 
 private:
 	void buildPolyhedron();
+	void calcNormals();
 	void makeQuad(int, int, int, int);
 	GLuint vPosition;
 	GLuint vColor;
+	GLuint vNormal;
 	GLuint mmLoc;
 	GLuint cmLoc;
 	GLuint pmLoc;
+	GLuint npos;
+	GLuint diffuse_loc;
+	GLuint spec_loc;
+	GLuint ambient_loc;
+	GLuint alpha_loc;
 	vec4 randomColor();
 	GLfloat randomFloat();
 
@@ -47,5 +55,6 @@ private:
 
 	vector<vec4> points; //6 faces, 2 triangles/face, 3 vertices per triangle
 	vector<vec4> colors;
+	vector<vec3> normals;
 };
 #endif
