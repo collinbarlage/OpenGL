@@ -4,6 +4,13 @@ Polyhedron::Polyhedron() {
 	wireframe = false;
 }
 
+Polyhedron::Polyhedron(vec4 d, vec4 s, vec4 a) {
+	wireframe = false;
+	diff = d;
+	spec = s;
+	ambi = a;
+}
+
 void Polyhedron::init() {
 	
 	calcNormals();
@@ -63,9 +70,9 @@ void Polyhedron::draw(Camera cam, vector<Light> lights){
 	glUniformMatrix4fv(mmLoc, 1, GL_TRUE,modelmatrix);
 	glUniformMatrix4fv(cmLoc, 1, GL_TRUE,cam.cameraMatrix);
 	glUniformMatrix4fv(pmLoc, 1, GL_TRUE,cam.projection);
-	glUniform4fv(diffuse_loc, 1, vec4(0.431, 0.557, 0.325,1));
-	glUniform4fv(spec_loc, 1, vec4(0.431, 0.557, 0.325,1));
-	glUniform4fv(ambient_loc, 1, vec4(0.431, 0.557, 0.325,1));
+	glUniform4fv(diffuse_loc, 1, diff);
+	glUniform4fv(spec_loc, 1, spec);
+	glUniform4fv(ambient_loc, 1, ambi);
 	glUniform1f(alpha_loc, 100);
 	GLuint light_loc = glGetUniformLocation(program, "lightPos");
 	glUniform4fv(light_loc, 1, lights[0].getPosition());
@@ -104,6 +111,33 @@ void Polyhedron::addVert(vec4 v) {
 void Polyhedron::addVert(vec4 v, vec4 c) {
 	points.push_back(v);
 	colors.push_back(c);
+}
+
+void Polyhedron::loadSmf(string filename) {
+	//load file 
+	cout << "Loading file from " << filename << " ...\n";
+	ifstream infile(filename.c_str());
+	string fin;
+
+	//read
+	while (getline(infile, fin)) {
+		istringstream iss(fin);
+		//split line
+		vector<string> tokens;
+		copy(istream_iterator<string>(iss),
+			istream_iterator<string>(),
+			back_inserter(tokens));
+
+		if(!tokens[0].compare("v")){
+			vertices.push_back(vec4(stof(tokens[1]), stof(tokens[2]), stof(tokens[3]), 1));
+		} else if(!tokens[0].compare("f")) {
+			//cout << "ayye" << endl;
+			//cout << vertices[stoi(tokens[1])] << endl;
+			points.push_back(vertices[stoi(tokens[1])-1]);
+			points.push_back(vertices[stoi(tokens[2])-1]);
+			points.push_back(vertices[stoi(tokens[3])-1]);
+		}
+	}
 }
 
 vec4 Polyhedron::randomColor() {

@@ -4,10 +4,13 @@ Sphere::Sphere() {
 	wireframe = false;
 }
 
-Sphere::Sphere(unsigned int i) {
+Sphere::Sphere(unsigned int i, vec4 d, vec4 s, vec4 a) {
 	wireframe = false;
 	numVerts = i;
 	index = 0;
+	diff = d;
+	spec = s;
+	ambi = a;
 }
 
 void Sphere::init() {
@@ -68,9 +71,9 @@ void Sphere::draw(Camera cam, vector<Light> lights){
 	glUniformMatrix4fv(mmLoc, 1, GL_TRUE,modelmatrix);
 	glUniformMatrix4fv(cmLoc, 1, GL_TRUE,cam.cameraMatrix);
 	glUniformMatrix4fv(pmLoc, 1, GL_TRUE,cam.projection);
-	glUniform4fv(diffuse_loc, 1, vec4(0.596, 0.467, 0.482,1));
-	glUniform4fv(spec_loc, 1, vec4(0.596, 0.467, 0.482,1));
-	glUniform4fv(ambient_loc, 1, vec4(0.596, 0.467, 0.482,1));
+	glUniform4fv(diffuse_loc, 1, diff);
+	glUniform4fv(spec_loc, 1, spec);
+	glUniform4fv(ambient_loc, 1, ambi);
 	glUniform1f(alpha_loc, 100);
 	GLuint light_loc = glGetUniformLocation(program, "lightPos");
 	glUniform4fv(light_loc, 1, lights[0].getPosition());

@@ -85,6 +85,7 @@ void init()
 	lights.push_back(sun);
 
 	//floor plane
+	/*
 	mbox = new Polyhedron();
 	mbox->addVert(vec4(10,-2,10,1));
 	mbox->addVert(vec4(10,-2,-10,1));
@@ -100,6 +101,14 @@ void init()
 	sphere = new Sphere(64);
 	sphere->init();
 	drawables.push_back(sphere);
+	*/
+	//cow
+	mbox = new Polyhedron(vec4(5.0, 0.794, 0.886,1),vec4(0.1, 0.694, 0.986,1),vec4(0.0, 0.1, 0.2,1));
+	mbox->loadSmf("bound-cow.smf");
+	mbox->setModelMatrix(Scale(2,2,2));
+	mbox->init();
+	drawables.push_back(mbox);
+
 
 
 	

@@ -17,7 +17,7 @@ class Sphere: public Drawable{
 
 public:
 	Sphere();
-	Sphere(unsigned int i);
+	Sphere(unsigned int i, vec4 diff, vec4 spec, vec4 amb);
 	~Sphere();
 
 	void init();
@@ -50,6 +50,9 @@ private:
 	unsigned int index;
 	unsigned int numVerts;
 	bool wireframe;
+	vec4 spec;
+	vec4 diff;
+	vec4 ambi;
 
 	vector<vec4> points; //6 faces, 2 triangles/face, 3 vertices per triangle
 	vector<vec4> colors;

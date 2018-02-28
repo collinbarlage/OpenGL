@@ -9,6 +9,9 @@
 #include <cstdlib>
 #include <string>
 #include <vector>
+#include <sstream>
+#include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -17,6 +20,7 @@ class Polyhedron: public Drawable{
 
 public:
 	Polyhedron();
+	Polyhedron(vec4 diff, vec4 spec, vec4 ambi);
 	~Polyhedron();
 
 	Polyhedron(vector<vec4> verts);
@@ -49,6 +53,9 @@ private:
 
 	unsigned int index;
 	bool wireframe;
+	vec4 spec;
+	vec4 diff;
+	vec4 ambi;
 
 	vector<vec4> vertices;
 	vector<vec4> potentialColors;
