@@ -104,7 +104,6 @@ void Polyhedron::calcNormals() {
 
 void Polyhedron::addVert(vec4 v) {
 	points.push_back(v);
-	//colors.push_back(randomColor());
 
 }
 

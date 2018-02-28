@@ -26,7 +26,7 @@ vector<Drawable*>drawables;
 
 //Lights
 vector<Light*> lights;
-Light sun = Light(vec4(2,10,-3,1),vec4(.9,.7,.5,1),vec4(1,1,1,1),vec4(.3,1,1,1));
+Light sun = Light(vec4(2,10,0,1),vec4(.9,.7,.5,1),vec4(1,1,1,1),vec4(.3,1,1,1));
 float orbitTime = -3.1415926535;
 
 
@@ -105,8 +105,8 @@ void init()
 	drawables.push_back(sphere);
 
 	//cube
-	mbox = new Polyhedron(vec4(0.267, 0.324, 0.812,1), vec4(0.267, 0.512, 0.655,1), vec4(0.067, 0.312, 0.455,1));
-	mbox->loadSmf("polyhedron");
+	mbox = new Polyhedron(vec4(0.267, 0.324, 0.812,1), vec4(0.267, 0.512, 0.655,1), vec4(0.067, 0.212, 0.355,1));
+	mbox->loadSmf("cube.smf");
 	mbox->setModelMatrix(Translate(-1,-.4,-1));
 	mbox->init();
 	drawables.push_back(mbox);
@@ -224,7 +224,7 @@ void arrows(int key, int x, int y) {
 void timerCallback(int value) {
 	vec4 pos = sun.position;
 	//Rotate sun
-	orbitTime += .01;
+	orbitTime += .002;
 	if(orbitTime >= 3.1415926535) 
 		orbitTime = -3.1415926535;
 	sun.position = vec4(cos(orbitTime)*10, sin(orbitTime)*10, pos.z, 1);
