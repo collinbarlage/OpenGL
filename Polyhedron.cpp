@@ -17,7 +17,7 @@ void Polyhedron::init() {
 
 	//get buffers for attributes and indices
 	glGenBuffers(1, &VBO);
-	assert((program = InitShader("vshader00_v150.glsl", "fshader00_v150.glsl"))!=-1);
+	assert((program = InitShader("vshader_poly.glsl", "fshader_poly.glsl"))!=-1);
 	glUseProgram(program);  //make it the active one
 	
 	//get vData

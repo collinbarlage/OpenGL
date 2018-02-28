@@ -87,7 +87,6 @@ void init()
 	
 
 	//floor plane
-	
 	mbox = new Polyhedron(vec4(0.531, 0.657, 0.325,1),vec4(0.431, 0.557, 0.125,1),vec4(0.131, 0.457, 0.325,1));
 	mbox->addVert(vec4(10,-2,10,1));
 	mbox->addVert(vec4(10,-2,-10,1));
@@ -101,11 +100,16 @@ void init()
 
 	//sphere
 	sphere = new Sphere(64,vec4(5.0, 0.794, 0.886,1),vec4(0.1, 0.694, 0.986,1),vec4(0.0, 0.1, 0.2,1));
+	sphere->setModelMatrix(Translate(1,-.4,1));
 	sphere->init();
 	drawables.push_back(sphere);
 
-	//orbit sun
-	timerCallback(0);
+	//cube
+	mbox = new Polyhedron(vec4(0.267, 0.324, 0.812,1), vec4(0.267, 0.512, 0.655,1), vec4(0.067, 0.312, 0.455,1));
+	mbox->loadSmf("polyhedron");
+	mbox->setModelMatrix(Translate(-1,-.4,-1));
+	mbox->init();
+	drawables.push_back(mbox);
 	
 	//cow
 	//mbox = new Polyhedron(vec4(5.0, 0.794, 0.886,1),vec4(0.1, 0.694, 0.986,1),vec4(0.0, 0.1, 0.2,1));
@@ -114,7 +118,8 @@ void init()
 	//mbox->init();
 	//drawables.push_back(mbox);
 
-
+	//orbit sun
+	timerCallback(0);
 }
 
 //----------------------------------------------------------------------------
