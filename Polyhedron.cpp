@@ -63,7 +63,7 @@ Polyhedron::~Polyhedron(){
 //----------------------------------------------------------------------------
 
 
-void Polyhedron::draw(Camera cam, vector<Light> lights){
+void Polyhedron::draw(Camera cam, vector<Light*> lights){
 	//Draw the Polyhedron body
 	glBindVertexArray(VAO);
 	glUseProgram(program);  //also switch to using this shader program
@@ -75,13 +75,13 @@ void Polyhedron::draw(Camera cam, vector<Light> lights){
 	glUniform4fv(ambient_loc, 1, ambi);
 	glUniform1f(alpha_loc, 100);
 	GLuint light_loc = glGetUniformLocation(program, "lightPos");
-	glUniform4fv(light_loc, 1, lights[0].getPosition());
+	glUniform4fv(light_loc, 1, lights[0]->getPosition());
 	GLuint ambient_loc2 = glGetUniformLocation(program, "lightAmbient");
-	glUniform4fv(ambient_loc2, 1, lights[0].getAmbient());
+	glUniform4fv(ambient_loc2, 1, lights[0]->getAmbient());
 	GLuint diffuse_loc2 = glGetUniformLocation(program, "lightDiffuse");
-	glUniform4fv(diffuse_loc2, 1, lights[0].getDiffuse());
+	glUniform4fv(diffuse_loc2, 1, lights[0]->getDiffuse());
 	GLuint specular_loc2 = glGetUniformLocation(program, "lightSpecular");
-	glUniform4fv(specular_loc2, 1, lights[0].getSpecular());
+	glUniform4fv(specular_loc2, 1, lights[0]->getSpecular());
 
 	//if(wireframe) {
 		//glDrawArrays(GL_TRIANGLES, 0, points.size()/2);
@@ -114,28 +114,29 @@ void Polyhedron::addVert(vec4 v, vec4 c) {
 }
 
 void Polyhedron::loadSmf(string filename) {
-	//load file 
-	cout << "Loading file from " << filename << " ...\n";
-	ifstream infile(filename.c_str());
-	string fin;
+	if(!filename.compare("polyhedron")){
+		buildPolyhedron();
+	} else {
+		//load file 
+		ifstream infile(filename.c_str());
+		string fin;
 
-	//read
-	while (getline(infile, fin)) {
-		istringstream iss(fin);
-		//split line
-		vector<string> tokens;
-		copy(istream_iterator<string>(iss),
-			istream_iterator<string>(),
-			back_inserter(tokens));
+		//read
+		while (getline(infile, fin)) {
+			istringstream iss(fin);
+			//split line
+			vector<string> tokens;
+			copy(istream_iterator<string>(iss),
+				istream_iterator<string>(),
+				back_inserter(tokens));
 
-		if(!tokens[0].compare("v")){
-			vertices.push_back(vec4(stof(tokens[1]), stof(tokens[2]), stof(tokens[3]), 1));
-		} else if(!tokens[0].compare("f")) {
-			//cout << "ayye" << endl;
-			//cout << vertices[stoi(tokens[1])] << endl;
-			points.push_back(vertices[stoi(tokens[1])-1]);
-			points.push_back(vertices[stoi(tokens[2])-1]);
-			points.push_back(vertices[stoi(tokens[3])-1]);
+			if(!tokens[0].compare("v")){
+				vertices.push_back(vec4(stof(tokens[1]), stof(tokens[2]), stof(tokens[3]), 1));
+			} else if(!tokens[0].compare("f")) {
+				points.push_back(vertices[stoi(tokens[1])-1]);
+				points.push_back(vertices[stoi(tokens[2])-1]);
+				points.push_back(vertices[stoi(tokens[3])-1]);
+			}
 		}
 	}
 }

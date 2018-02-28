@@ -25,7 +25,9 @@ Camera cam2 = Camera(vec4(0,10,0,1), vec4(0,0,-1,1));
 vector<Drawable*>drawables;
 
 //Lights
-vector<Light> lights;
+vector<Light*> lights;
+Light sun = Light(vec4(2,10,-3,1),vec4(.9,.7,.5,1),vec4(1,1,1,1),vec4(.3,1,1,1));
+float orbitTime = -3.1415926535;
 
 
 //Helpers
@@ -81,12 +83,12 @@ void init()
 
 //scene
 	//lights
-	Light sun = Light(vec4(2,10,-3,1),vec4(.9,.7,.5,1),vec4(1,1,1,1),vec4(.3,1,1,1));
-	lights.push_back(sun);
+	lights.push_back(&sun);
+	
 
 	//floor plane
-	/*
-	mbox = new Polyhedron();
+	
+	mbox = new Polyhedron(vec4(0.531, 0.657, 0.325,1),vec4(0.431, 0.557, 0.125,1),vec4(0.131, 0.457, 0.325,1));
 	mbox->addVert(vec4(10,-2,10,1));
 	mbox->addVert(vec4(10,-2,-10,1));
 	mbox->addVert(vec4(-10,-2,-10,1));
@@ -98,20 +100,20 @@ void init()
 	drawables.push_back(mbox);
 
 	//sphere
-	sphere = new Sphere(64);
+	sphere = new Sphere(64,vec4(5.0, 0.794, 0.886,1),vec4(0.1, 0.694, 0.986,1),vec4(0.0, 0.1, 0.2,1));
 	sphere->init();
 	drawables.push_back(sphere);
-	*/
-	//cow
-	mbox = new Polyhedron(vec4(5.0, 0.794, 0.886,1),vec4(0.1, 0.694, 0.986,1),vec4(0.0, 0.1, 0.2,1));
-	mbox->loadSmf("bound-cow.smf");
-	mbox->setModelMatrix(Scale(2,2,2));
-	mbox->init();
-	drawables.push_back(mbox);
 
-
-
+	//orbit sun
+	timerCallback(0);
 	
+	//cow
+	//mbox = new Polyhedron(vec4(5.0, 0.794, 0.886,1),vec4(0.1, 0.694, 0.986,1),vec4(0.0, 0.1, 0.2,1));
+	//mbox->loadSmf("bound-cow.smf");
+	//mbox->setModelMatrix(Scale(2,2,2));
+	//mbox->init();
+	//drawables.push_back(mbox);
+
 
 }
 
@@ -120,6 +122,7 @@ void init()
 void display( void )
 {
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+	cout << lights[0]->position << endl;
 
 	for (unsigned int i = 0; i < drawables.size(); i++)
 		drawables[i]->draw(cam1, lights);
@@ -214,18 +217,15 @@ void arrows(int key, int x, int y) {
 //----------------------------------------------------------------------------
 //Timer  callback
 void timerCallback(int value) {
-	vec2 pos;
-	//Rotate all objects
-	for(int i=0; i<drawables.size(); i++) {
-		//pos = drawables[i]->position;
-		//rotate
-		drawables[i]->setModelMatrix(RotateY(1));
-	}
-	//continue rotating unless spacebar was pressed to toggle animation
-	//if (animate) {
-		//glutTimerFunc(10, timerCallback, 0);
-		//glutPostRedisplay();
-	//}
+	vec4 pos = sun.position;
+	//Rotate sun
+	orbitTime += .01;
+	if(orbitTime >= 3.1415926535) 
+		orbitTime = -3.1415926535;
+	sun.position = vec4(cos(orbitTime)*10, sin(orbitTime)*10, pos.z, 1);
+	//continue animating
+	glutTimerFunc(10, timerCallback, 0);
+	glutPostRedisplay();
 }
 
 void close(){

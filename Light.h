@@ -10,8 +10,9 @@ public:
 	vec4 getAmbient(){return ambient;}
 	vec4 getDiffuse(){return diffuse;}
 	vec4 getSpecular(){return specular;}
-private:
 	vec4 position;
+
+private:
 	vec4 ambient;
 	vec4 diffuse;
 	vec4 specular;

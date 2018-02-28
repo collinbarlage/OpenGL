@@ -64,7 +64,7 @@ Sphere::~Sphere(){
 //----------------------------------------------------------------------------
 
 
-void Sphere::draw(Camera cam, vector<Light> lights){
+void Sphere::draw(Camera cam, vector<Light*> lights){
 	//Draw the Sphere body
 	glBindVertexArray(VAO);
 	glUseProgram(program);  //also switch to using this shader program
@@ -76,13 +76,13 @@ void Sphere::draw(Camera cam, vector<Light> lights){
 	glUniform4fv(ambient_loc, 1, ambi);
 	glUniform1f(alpha_loc, 100);
 	GLuint light_loc = glGetUniformLocation(program, "lightPos");
-	glUniform4fv(light_loc, 1, lights[0].getPosition());
+	glUniform4fv(light_loc, 1, lights[0]->getPosition());
 	GLuint ambient_loc2 = glGetUniformLocation(program, "lightAmbient");
-	glUniform4fv(ambient_loc2, 1, lights[0].getAmbient());
+	glUniform4fv(ambient_loc2, 1, lights[0]->getAmbient());
 	GLuint diffuse_loc2 = glGetUniformLocation(program, "lightDiffuse");
-	glUniform4fv(diffuse_loc2, 1, lights[0].getDiffuse());
+	glUniform4fv(diffuse_loc2, 1, lights[0]->getDiffuse());
 	GLuint specular_loc2 = glGetUniformLocation(program, "lightSpecular");
-	glUniform4fv(specular_loc2, 1, lights[0].getSpecular());
+	glUniform4fv(specular_loc2, 1, lights[0]->getSpecular());
 
 	glDrawArrays(GL_TRIANGLES, 0, points.size());
 
