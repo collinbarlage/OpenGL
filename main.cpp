@@ -27,7 +27,7 @@ vector<Drawable*>drawables;
 //Lights
 vector<Light*> lights;
 Light sun = Light(vec4(2,10,0,1),vec4(.9,.7,.5,1),vec4(1,1,1,1),vec4(.3,1,1,1));
-float orbitTime = -3.1415926535;
+float orbitTime = 0;
 
 
 //Helpers
@@ -111,13 +111,6 @@ void init()
 	mbox->init();
 	drawables.push_back(mbox);
 	
-	//cow
-	//mbox = new Polyhedron(vec4(5.0, 0.794, 0.886,1),vec4(0.1, 0.694, 0.986,1),vec4(0.0, 0.1, 0.2,1));
-	//mbox->loadSmf("bound-cow.smf");
-	//mbox->setModelMatrix(Scale(2,2,2));
-	//mbox->init();
-	//drawables.push_back(mbox);
-
 	//orbit sun
 	timerCallback(0);
 }
@@ -127,7 +120,6 @@ void init()
 void display( void )
 {
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-	cout << lights[0]->position << endl;
 
 	for (unsigned int i = 0; i < drawables.size(); i++)
 		drawables[i]->draw(cam1, lights);
