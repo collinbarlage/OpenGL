@@ -10,11 +10,13 @@ public:
 	void move(GLfloat x, GLfloat y, GLfloat z);
 	void rotate(GLfloat x, GLfloat y, GLfloat z);
 
+	vec4 position;
 	vec4 getPosition(){return position;}
 	vec4 getAmbient(){return ambient;}
 	vec4 getDiffuse(){return diffuse;}
 	vec4 getSpecular(){return specular;}
-	vec4 position;
+	int isOn(){return on;}
+	int on;
 
 
 private:

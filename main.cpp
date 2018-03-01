@@ -27,7 +27,7 @@ vector<Drawable*>drawables;
 //Lights
 vector<Light*> lights;
 Light sun = Light(vec4(2,10,0,1),vec4(.9,.7,.5,1),vec4(1,1,1,1),vec4(.3,1,1,1));
-Light flashlight = Light(vec4(0,2,-2,1),vec4(.6,.4,.2,1),vec4(.6,.5,.5,1),vec4(.5,.8,.8,1));
+Light flashlight = Light(vec4(0,2,-2,1),vec4(.2,.1,.1,1),vec4(.3,.1,0,1),vec4(.5,.5,.1,1));
 float orbitTime = 0;
 
 
@@ -84,8 +84,10 @@ void init()
 
 //scene
 	//lights
-	//lights.push_back(&sun);
+	lights.push_back(&sun);
+	flashlight.on = 0; //initilize flashlight to be off
 	lights.push_back(&flashlight);
+
 	
 
 	//floor plane
@@ -160,10 +162,8 @@ void keyboard(unsigned char key, int x, int y)
 		cam1.rotate(1,0,0);
 		break;
 	case ' ': 
-		//Camera toggle
-		camSelect = !camSelect; //toggle
-		//glutTimerFunc(1, timerCallback, 0);
-
+		//Flashlight toggle
+		flashlight.on = !flashlight.isOn(); //toggle
 		break;
 	case 'p': case 'P':
 		cam1.toggleProj();
@@ -220,13 +220,13 @@ void arrows(int key, int x, int y) {
 //----------------------------------------------------------------------------
 //Timer  callback
 void timerCallback(int value) {
-	//vec4 pos = sun.position;
+	vec4 pos = sun.position;
 	//Rotate sun
 	orbitTime += .002;
 	if(orbitTime >= 3.1415926535) 
 		orbitTime = -3.1415926535;
 
-	//sun.position = vec4(cos(orbitTime)*10, sin(orbitTime)*10, pos.z, 1);
+	sun.position = vec4(cos(orbitTime)*10, sin(orbitTime)*10, pos.z, 1);
 	//continue animating
 	glutTimerFunc(10, timerCallback, 0);
 	glutPostRedisplay();
