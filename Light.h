@@ -6,11 +6,15 @@ class Light {
 public:
 	Light(vec4 p, vec4 a, vec4 s, vec4 d) : position(p),
 	ambient(a), specular(s), diffuse(d) {}
+
+	void move(GLfloat x, GLfloat y, GLfloat z);
+
 	vec4 getPosition(){return position;}
 	vec4 getAmbient(){return ambient;}
 	vec4 getDiffuse(){return diffuse;}
 	vec4 getSpecular(){return specular;}
 	vec4 position;
+
 
 private:
 	vec4 ambient;

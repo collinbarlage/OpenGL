@@ -26,7 +26,8 @@ vector<Drawable*>drawables;
 
 //Lights
 vector<Light*> lights;
-Light sun = Light(vec4(2,10,0,1),vec4(.9,.7,.5,1),vec4(1,1,1,1),vec4(.3,1,1,1));
+//Light sun = Light(vec4(2,10,0,1),vec4(.9,.7,.5,1),vec4(1,1,1,1),vec4(.3,1,1,1));
+Light flashlight = Light(vec4(0,2,-2,1),vec4(.9,.7,.5,1),vec4(.8,.8,.8,1),vec4(.3,1,1,1));
 float orbitTime = 0;
 
 
@@ -83,7 +84,8 @@ void init()
 
 //scene
 	//lights
-	lights.push_back(&sun);
+	//lights.push_back(&sun);
+	lights.push_back(&flashlight);
 	
 
 	//floor plane
@@ -120,7 +122,7 @@ void init()
 void display( void )
 {
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-
+	cout << lights[0]->position << endl;
 	for (unsigned int i = 0; i < drawables.size(); i++)
 		drawables[i]->draw(cam1, lights);
 	glutSwapBuffers();
@@ -193,33 +195,38 @@ void arrows(int key, int x, int y) {
 	switch (key) {
 	case GLUT_KEY_LEFT:
 		cam1.move(-.1,0,0);
+		flashlight.move(.1,0,0);
 		break;
 
 	case GLUT_KEY_RIGHT:
 		cam1.move(.1,0,0);
+		flashlight.move(-.1,0,0);
 		break;
 
 	case GLUT_KEY_UP:
 		cam1.move(0,0,-.1);
+		flashlight.move(0,0,.1);
 		break;
 
 	case GLUT_KEY_DOWN:
 		cam1.move(0,0,.1);
+		flashlight.move(0,0,-.1);
 		break;
 	}
-
+	glutPostRedisplay();
 	display();
 }
 
 //----------------------------------------------------------------------------
 //Timer  callback
 void timerCallback(int value) {
-	vec4 pos = sun.position;
+	//vec4 pos = sun.position;
 	//Rotate sun
 	orbitTime += .002;
 	if(orbitTime >= 3.1415926535) 
 		orbitTime = -3.1415926535;
-	sun.position = vec4(cos(orbitTime)*10, sin(orbitTime)*10, pos.z, 1);
+
+	//sun.position = vec4(cos(orbitTime)*10, sin(orbitTime)*10, pos.z, 1);
 	//continue animating
 	glutTimerFunc(10, timerCallback, 0);
 	glutPostRedisplay();
