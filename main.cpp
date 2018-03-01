@@ -26,8 +26,8 @@ vector<Drawable*>drawables;
 
 //Lights
 vector<Light*> lights;
-//Light sun = Light(vec4(2,10,0,1),vec4(.9,.7,.5,1),vec4(1,1,1,1),vec4(.3,1,1,1));
-Light flashlight = Light(vec4(0,2,-2,1),vec4(.9,.7,.5,1),vec4(.8,.8,.8,1),vec4(.3,1,1,1));
+Light sun = Light(vec4(2,10,0,1),vec4(.9,.7,.5,1),vec4(1,1,1,1),vec4(.3,1,1,1));
+Light flashlight = Light(vec4(0,2,-2,1),vec4(.6,.4,.2,1),vec4(.6,.5,.5,1),vec4(.5,.8,.8,1));
 float orbitTime = 0;
 
 
@@ -122,7 +122,7 @@ void init()
 void display( void )
 {
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-	cout << lights[0]->position << endl;
+	//cout << lights[0]->position << endl;
 	for (unsigned int i = 0; i < drawables.size(); i++)
 		drawables[i]->draw(cam1, lights);
 	glutSwapBuffers();

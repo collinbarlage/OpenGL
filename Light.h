@@ -8,6 +8,7 @@ public:
 	ambient(a), specular(s), diffuse(d) {}
 
 	void move(GLfloat x, GLfloat y, GLfloat z);
+	void rotate(GLfloat x, GLfloat y, GLfloat z);
 
 	vec4 getPosition(){return position;}
 	vec4 getAmbient(){return ambient;}
