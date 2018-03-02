@@ -74,14 +74,26 @@ void Polyhedron::draw(Camera cam, vector<Light*> lights){
 	glUniform4fv(spec_loc, 1, spec);
 	glUniform4fv(ambient_loc, 1, ambi);
 	glUniform1f(alpha_loc, 100);
-	GLuint light_loc = glGetUniformLocation(program, "lightPos");
+	//load sun
+	GLuint light_loc = glGetUniformLocation(program, "SunlightPos");
 	glUniform4fv(light_loc, 1, lights[0]->getPosition());
-	GLuint ambient_loc2 = glGetUniformLocation(program, "lightAmbient");
+	GLuint ambient_loc2 = glGetUniformLocation(program, "SunlightAmbient");
 	glUniform4fv(ambient_loc2, 1, lights[0]->getAmbient());
-	GLuint diffuse_loc2 = glGetUniformLocation(program, "lightDiffuse");
+	GLuint diffuse_loc2 = glGetUniformLocation(program, "SunlightDiffuse");
 	glUniform4fv(diffuse_loc2, 1, lights[0]->getDiffuse());
-	GLuint specular_loc2 = glGetUniformLocation(program, "lightSpecular");
+	GLuint specular_loc2 = glGetUniformLocation(program, "SunlightSpecular");
 	glUniform4fv(specular_loc2, 1, lights[0]->getSpecular());
+	//load flashlight
+	GLuint light_locFlash = glGetUniformLocation(program, "FlashlightPos");
+	glUniform4fv(light_locFlash, 1, lights[1]->getPosition());
+	GLuint ambient_loc2Flash = glGetUniformLocation(program, "FlashlightAmbient");
+	glUniform4fv(ambient_loc2Flash, 1, lights[1]->getAmbient());
+	GLuint diffuse_loc2Flash = glGetUniformLocation(program, "FlashlightDiffuse");
+	glUniform4fv(diffuse_loc2Flash, 1, lights[1]->getDiffuse());
+	GLuint specular_loc2Flash = glGetUniformLocation(program, "FlashlightSpecular");
+	glUniform4fv(specular_loc2Flash, 1, lights[1]->getSpecular());
+	GLuint flashlight = glGetUniformLocation(program, "flashlight");
+	glUniform1i(flashlight, lights[1]->isOn());
 
 	//if(wireframe) {
 		//glDrawArrays(GL_TRIANGLES, 0, points.size()/2);
