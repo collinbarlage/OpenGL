@@ -88,17 +88,7 @@ void init()
 	flashlight.on = 0; //initilize flashlight to be off
 	lights.push_back(&flashlight);
 
-	//floor plane
-	mbox = new Polyhedron(vec4(0.531, 0.657, 0.325,1),vec4(0.431, 0.557, 0.125,1),vec4(0.131, 0.457, 0.325,1));
-	mbox->addVert(vec4(10,-2,10,1));
-	mbox->addVert(vec4(10,-2,-10,1));
-	mbox->addVert(vec4(-10,-2,-10,1));
-
-	mbox->addVert(vec4(-10,-2,10,1));
-	mbox->addVert(vec4(10,-2,10,1));
-	mbox->addVert(vec4(-10,-2,-10,1));
-	mbox->init();
-	drawables.push_back(mbox);
+	
 
 	//sphere
 	sphere = new Sphere(64,vec4(5.0, 0.794, 0.886,1),vec4(0.1, 0.694, 0.986,1),vec4(0.0, 0.1, 0.2,1));
@@ -108,9 +98,17 @@ void init()
 
 	//cube
 	mbox = new Polyhedron(vec4(0.267, 0.324, 0.812,1), vec4(0.267, 0.512, 0.655,1), vec4(0.067, 0.212, 0.355,1));
-	mbox->loadSmf("cube.smf");
+	mbox->loadSmf("cube");
 	mbox->setModelMatrix(Translate(-1,-.4,-1));
-	mbox->init();
+	mbox->init("bloc.ppm");
+	drawables.push_back(mbox);
+
+	//floor plane
+	mbox = new Polyhedron(vec4(0.267, 0.324, 0.812,1), vec4(0.267, 0.512, 0.655,1), vec4(0.067, 0.212, 0.355,1));
+	mbox->loadSmf("cube");
+	//mbox->setModelMatrix(Translate(-1,-.4,-1));
+	mbox->setModelMatrix(Translate(0,-1.5,0)*Scale(15.0,0.1,15.0));
+	mbox->init("grass.ppm");
 	drawables.push_back(mbox);
 	
 	//orbit sun

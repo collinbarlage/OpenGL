@@ -2,6 +2,9 @@
 
 in  vec4 vPosition;
 in  vec3 vNormal;
+in  vec2 vTexCoord;
+
+out vec2 texCoord;
 
 out vec3 fNSun;
 out vec3 fESun;
@@ -20,6 +23,8 @@ uniform vec4 FlashlightPos;
 
 void main() 
 { 
+	texCoord = vTexCoord;
+
 	vec3 Flashpos = (camera_matrix*model_matrix*vPosition).xyz;
 	vec3 FlashlightPosInCam = (camera_matrix*FlashlightPos).xyz;
 

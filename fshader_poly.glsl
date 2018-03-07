@@ -1,5 +1,7 @@
 #version 150
 
+in vec2 texCoord;
+
 uniform vec4 SunlightAmbient, SunlightDiffuse, SunlightSpecular;
 in vec3  fNSun;
 in vec3  fLSun;
@@ -11,9 +13,10 @@ in vec3  fNFlash;
 in vec3  fLFlash;
 in vec3  fEFlash;
 
-
 uniform vec4 matAmbient, matDiffuse, matSpecular;
 uniform float matAlpha;
+
+uniform sampler2D textureID;
 
 out vec4 fColor;
 
@@ -60,6 +63,7 @@ void main()
 
 	fColor = Sunambient+Sundiffuse+Sunspec;
 	fColor = fColor + flashlightColor;
+	fColor = texture(textureID, texCoord);
 	fColor.a = 1.0;
 } 
 

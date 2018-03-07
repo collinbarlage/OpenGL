@@ -25,7 +25,7 @@ public:
 
 	Polyhedron(vector<vec4> verts);
 
-	void init();
+	void init(char * textureName);
 	void addVert(vec4 v);
 	void addVert(vec4 v, vec4 c);
 	void draw(Camera, vector<Light*>);
@@ -35,15 +35,19 @@ public:
 
 private:
 	void buildPolyhedron();
+	void buildCube();
 	void calcNormals();
-	void makeQuad(int, int, int, int);
+	void makeQuad(GLuint a, GLuint b, GLuint c, GLuint d);
 	GLuint vPosition;
 	GLuint vColor;
 	GLuint vNormal;
+	GLuint vTex;
 	GLuint mmLoc;
 	GLuint cmLoc;
 	GLuint pmLoc;
+	GLuint texLoc;
 	GLuint npos;
+	GLuint texture;
 	GLuint diffuse_loc;
 	GLuint spec_loc;
 	GLuint ambient_loc;
@@ -63,5 +67,6 @@ private:
 	vector<vec4> points; //6 faces, 2 triangles/face, 3 vertices per triangle
 	vector<vec4> colors;
 	vector<vec3> normals;
+	vector<vec2> textureCoords;
 };
 #endif

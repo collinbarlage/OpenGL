@@ -11,10 +11,10 @@ Polyhedron::Polyhedron(vec4 d, vec4 s, vec4 a) {
 	ambi = a;
 }
 
-void Polyhedron::init() {
+void Polyhedron::init(char * textureName) {
+	index = 0;
+	//buildCube();
 	
-	calcNormals();
-
 	//get buffers for attributes and indices
 	glGenBuffers(1, &VBO);
 	assert((program = InitShader("vshader_poly.glsl", "fshader_poly.glsl"))!=-1);
@@ -23,6 +23,8 @@ void Polyhedron::init() {
 	//get vData
 	assert((vPosition = glGetAttribLocation(program, "vPosition")) != -1);
 	assert((vNormal = glGetAttribLocation(program, "vNormal"))!=-1);
+	assert((vTex = glGetAttribLocation(program, "vTexCoord"))!=-1);
+
 
 	//get light location
 	diffuse_loc = glGetUniformLocation(program, "matDiffuse");
@@ -34,12 +36,14 @@ void Polyhedron::init() {
 	assert((mmLoc = glGetUniformLocation(program, "model_matrix")) != -1);
 	assert((cmLoc = glGetUniformLocation(program, "camera_matrix")) != -1);
 	assert((pmLoc = glGetUniformLocation(program, "proj_matrix")) != -1);
+	assert((texLoc = glGetUniformLocation(program, "textureID")) != -1);
 
 	//put the data on the VBO
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(points)*points.size()*2, NULL, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(points)*points.size()*3, NULL, GL_STATIC_DRAW);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(points)*points.size(), &points[0]);
 	glBufferSubData(GL_ARRAY_BUFFER, sizeof(points)*points.size(), sizeof(points)*points.size(), &normals[0]);
+	glBufferSubData(GL_ARRAY_BUFFER, sizeof(points)*points.size()*2, sizeof(points)*points.size(), &textureCoords[0]);
 
 	//set up stuff for the body of the Polyhedron
 	glGenVertexArrays(1, &VAO);
@@ -49,11 +53,25 @@ void Polyhedron::init() {
 	glEnableVertexAttribArray(vPosition);  //enable it
 	glVertexAttribPointer(vPosition, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
 
-	//get the location of the uniform color in the shader
 	glEnableVertexAttribArray(vNormal);
 	glVertexAttribPointer(vNormal, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeof(points)*points.size()));
 
+	glEnableVertexAttribArray(vTex);
+	glVertexAttribPointer(vTex, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeof(points)*points.size()*2));
 
+	///set up texture
+	int width = 20;
+	int height= 20;
+	GLubyte *image0 = ppmRead(textureName, &width, &height);
+	glGenTextures(1, &texture);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB,
+	GL_UNSIGNED_BYTE, image0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 }
 
 Polyhedron::~Polyhedron(){
@@ -74,6 +92,13 @@ void Polyhedron::draw(Camera cam, vector<Light*> lights){
 	glUniform4fv(spec_loc, 1, spec);
 	glUniform4fv(ambient_loc, 1, ambi);
 	glUniform1f(alpha_loc, 100);
+	glUniform1i(texLoc, 0);
+
+	//load texture
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+
 	//load sun
 	GLuint light_loc = glGetUniformLocation(program, "SunlightPos");
 	glUniform4fv(light_loc, 1, lights[0]->getPosition());
@@ -112,6 +137,29 @@ void Polyhedron::calcNormals() {
 	}
 }
 
+void Polyhedron::buildCube() {
+	makeQuad(1,0,3,2);
+	makeQuad(2,3,7,6);
+	makeQuad(3,0,4,7);
+	makeQuad(6,5,1,2);
+	makeQuad(4,5,6,7);
+	makeQuad(5,4,0,1);
+}
+
+void Polyhedron::makeQuad(GLuint a, GLuint b, GLuint c, GLuint d) {
+	vec4 data[] = {vec4(-0.5,-0.5,0.5,1.0),vec4(-0.5,0.5,0.5,1.0),vec4(0.5,0.5,0.5,1.0),vec4(0.5,-0.5,0.5,1.0),
+				   vec4(-0.5,-0.5,-0.5,1.0),vec4(-0.5,0.5,-0.5,1.0),vec4(0.5,0.5,-0.5,1.0),vec4(0.5,-0.5,-0.5,1.0)};
+
+	vec3 N = normalize(cross(data[b]-data[a], data[c]-data[a]));
+	addVert(data[a]); normals.push_back(N); textureCoords.push_back(vec2(0,0));
+	addVert(data[b]); normals.push_back(N); textureCoords.push_back(vec2(1,0));
+	addVert(data[c]); normals.push_back(N); textureCoords.push_back(vec2(1,1));
+
+	N = normalize(cross(data[c]-data[a], data[d]-data[a]));
+	addVert(data[c]); normals.push_back(N); textureCoords.push_back(vec2(0,0));
+	addVert(data[d]); normals.push_back(N); textureCoords.push_back(vec2(1,1));
+	addVert(data[a]); normals.push_back(N); textureCoords.push_back(vec2(0,1));
+}
 
 
 void Polyhedron::addVert(vec4 v) {
@@ -127,6 +175,8 @@ void Polyhedron::addVert(vec4 v, vec4 c) {
 void Polyhedron::loadSmf(string filename) {
 	if(!filename.compare("polyhedron")){
 		buildPolyhedron();
+	} else if(!filename.compare("cube")) {
+		buildCube();
 	} else {
 		//load file 
 		ifstream infile(filename.c_str());
@@ -149,6 +199,7 @@ void Polyhedron::loadSmf(string filename) {
 				points.push_back(vertices[stoi(tokens[3])-1]);
 			}
 		}
+		calcNormals();
 	}
 }
 
