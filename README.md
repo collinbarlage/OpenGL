@@ -1,15 +1,16 @@
 # OpenGL 🔥
-CS432 hw4
+CS432 hw5
 Collin Barlage  
-2/22/2018
+3/1/2018
 
-##HW4 NOTES - Change Log
+## HW5 NOTES - Change Log
 
-* Added 2nd camera
+* Added lights
+* Added materials
+* Added shading for multiple  lights
+* Added toggle for flashlight
 
-* Added ground plane
-
-* Implemented sphere
+*NOTE: the helper file cube.smf must be included to run this program, as well as the shaders*
 
 ## Features
 

@@ -88,8 +88,6 @@ void init()
 	flashlight.on = 0; //initilize flashlight to be off
 	lights.push_back(&flashlight);
 
-	
-
 	//floor plane
 	mbox = new Polyhedron(vec4(0.531, 0.657, 0.325,1),vec4(0.431, 0.557, 0.125,1),vec4(0.131, 0.457, 0.325,1));
 	mbox->addVert(vec4(10,-2,10,1));
