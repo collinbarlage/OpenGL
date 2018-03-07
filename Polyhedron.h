@@ -37,6 +37,7 @@ private:
 	void buildPolyhedron();
 	void buildCube();
 	void calcNormals();
+	void makeTexture(char * name);
 	void makeQuad(GLuint a, GLuint b, GLuint c, GLuint d);
 	GLuint vPosition;
 	GLuint vColor;
