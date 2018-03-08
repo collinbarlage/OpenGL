@@ -32,13 +32,13 @@ void main()
 
 		vec3 FlashH = normalize(FlashL+FlashE);
 
-		vec4 Flashambient = FlashlightAmbient*matAmbient;
+		vec4 Flashambient = FlashlightAmbient*texture(textureID, texCoord);
 
 		float FlashKd = max(dot(FlashL,FlashN),0.0);
-		vec4 Flashdiffuse = FlashKd*FlashlightDiffuse*matDiffuse;
+		vec4 Flashdiffuse = FlashKd*FlashlightDiffuse*texture(textureID, texCoord);
 
 		float FlashKs =  pow(max(dot(FlashN,FlashH), 0.0), matAlpha);
-		vec4 Flashspec = FlashKs*FlashlightSpecular*matSpecular;
+		vec4 Flashspec = FlashKs*FlashlightSpecular*texture(textureID, texCoord);
 		if(dot(FlashL,FlashN)<0.0)
 			Flashspec = vec4(0,0,0,1);
 

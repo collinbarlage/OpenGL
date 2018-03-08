@@ -139,9 +139,9 @@ void Polyhedron::makeQuad(GLuint a, GLuint b, GLuint c, GLuint d) {
 				   vec4(-0.5,-0.5,-0.5,1.0),vec4(-0.5,0.5,-0.5,1.0),vec4(0.5,0.5,-0.5,1.0),vec4(0.5,-0.5,-0.5,1.0)};
 
 	vec3 N = normalize(cross(data[b]-data[a], data[c]-data[a]));
-	addVert(data[a]); normals.push_back(N); textureCoords.push_back(vec2(0,0));
-	addVert(data[b]); normals.push_back(N); textureCoords.push_back(vec2(1,0));
-	addVert(data[c]); normals.push_back(N); textureCoords.push_back(vec2(1,1));
+	addVert(data[a]); normals.push_back(N); textureCoords.push_back(vec2(1,1));
+	addVert(data[b]); normals.push_back(N); textureCoords.push_back(vec2(0,0));
+	addVert(data[c]); normals.push_back(N); textureCoords.push_back(vec2(1,0));
 
 	N = normalize(cross(data[c]-data[a], data[d]-data[a]));
 	addVert(data[c]); normals.push_back(N); textureCoords.push_back(vec2(0,0));
@@ -433,4 +433,3 @@ void Polyhedron::buildPolyhedron() {
 
 	
 }
-
