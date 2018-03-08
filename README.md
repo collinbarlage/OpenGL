@@ -1,16 +1,13 @@
 # OpenGL 🔥
-CS432 hw5
+CS432 hw6
 Collin Barlage  
 3/1/2018
 
-## HW5 NOTES - Change Log
+## HW6 NOTES - Change Log
 
-* Added lights
-* Added materials
-* Added shading for multiple  lights
-* Added toggle for flashlight
+* Added textures
 
-*NOTE: the helper file cube.smf must be included to run this program, as well as the shaders*
+*NOTE: the helper files bloc.ppm, sky.ppm, grass.ppm, and stone.ppm must be included to run this program, as well as the shaders*
 
 ## Features
 

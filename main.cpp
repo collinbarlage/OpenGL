@@ -111,9 +111,22 @@ void init()
 	mbox->setModelMatrix(Translate(0,-1.5,0)*Scale(15.0,0.1,15.0));
 	mbox->init("grass.ppm");
 	drawables.push_back(mbox);
+
+	//skybox
+	mbox = new Polyhedron(vec4(0.267, 0.324, 0.812,1), vec4(0.267, 0.512, 0.655,1), vec4(0.067, 0.212, 0.355,1));
+	mbox->loadSmf("cube");
+	mbox->setModelMatrix(Translate(0,0,0)*Scale(50.0,50.0,50.0));
+	mbox->init("sky.ppm");
+	drawables.push_back(mbox);
 	
 	//orbit sun
 	timerCallback(0);
+	mbox = new Polyhedron(vec4(0.267, 0.324, 0.812,1), vec4(0.267, 0.512, 0.655,1), vec4(0.067, 0.212, 0.355,1));
+	mbox->loadSmf("cube");
+	//mbox->setModelMatrix(Translate(-1,-.4,-1));
+	mbox->setModelMatrix(Translate(0,-1.5,0)*Scale(15.0,0.1,15.0));
+	mbox->init("grass.ppm");
+	drawables.push_back(mbox);
 }
 
 //----------------------------------------------------------------------------
