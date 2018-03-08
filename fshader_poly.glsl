@@ -51,18 +51,19 @@ void main()
 
 	vec3 SunH = normalize(SunL+SunE);
 
-	vec4 Sunambient = SunlightAmbient*texture(textureID, texCoord);
+	vec4 Sunambient = SunlightAmbient*matAmbient;
 
 	float SunKd = max(dot(SunL,SunN),0.0);
-	vec4 Sundiffuse = SunKd*SunlightDiffuse*texture(textureID, texCoord);
+	vec4 Sundiffuse = SunKd*SunlightDiffuse*matDiffuse;
 
 	float SunKs = pow(max(dot(SunN,SunH), 0.0), matAlpha);
-	vec4 Sunspec = SunKs*SunlightSpecular*texture(textureID, texCoord);
+	vec4 Sunspec = SunKs*SunlightSpecular*matSpecular;
 	if(dot(SunL,SunN)<0.0)
 		Sunspec = vec4(0,0,0,1);
 
 	fColor = Sunambient+Sundiffuse+Sunspec;
 	fColor = fColor + flashlightColor;
+	fColor = texture(textureID, texCoord);
 	fColor.a = 1.0;
 } 
 
