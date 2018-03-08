@@ -33,6 +33,7 @@ float orbitTime = 0;
 
 //Helpers
 bool camSelect = false;
+bool stoneSelect = false;
 mat4 getCameraMatrix();
 vec4 getCameraEye();
 GLuint windowID=0;
@@ -164,7 +165,14 @@ void keyboard(unsigned char key, int x, int y)
 	case 'p': case 'P':
 		cam1.toggleProj();
 		break;
-
+	case 't': case 'T':
+		if(stoneSelect) {
+			drawables[1]->makeTexture("bloc.ppm");
+		} else {
+			drawables[1]->makeTexture("stone.ppm");
+		}
+		stoneSelect = !stoneSelect; //toggle
+		break;
 	}
 	display();
 }
